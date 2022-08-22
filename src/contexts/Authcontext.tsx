@@ -2,12 +2,14 @@ import { createContext, ReactNode, useState } from "react";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 import Router from "next/router";
 import { api } from "../services/apiClient";
+import { type } from "os";
 type AuthContextData = {
   user: userProps | any;
   isAuthenticated: boolean;
   signIn: (credenciais: signinProps) => Promise<void>;
 
   signOut: () => void;
+  registerUser: (data: registerUserProps) => Promise<void>;
 };
 
 type userProps = {
@@ -16,6 +18,11 @@ type userProps = {
   email: string;
 };
 type signinProps = {
+  email: string;
+  password: string;
+};
+type registerUserProps = {
+  name: string;
   email: string;
   password: string;
 };
@@ -52,8 +59,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
       console.log("Erro de Acesso " + error);
     }
   }
+  async function registerUser({ name, email, password }: registerUserProps) {
+    try {
+      api.post("/userS", {
+        name,
+        email,
+        password,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{ registerUser, user, isAuthenticated, signIn, signOut }}
+    >
       {children}
     </AuthContext.Provider>
   );
