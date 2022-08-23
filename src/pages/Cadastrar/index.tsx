@@ -7,6 +7,7 @@ import { Input } from "../../componets/ui/Input";
 import { Button } from "../../componets/ui/Button";
 import Link from "next/link";
 import { AuthContext } from "../../contexts/Authcontext";
+import { toast } from "react-toastify";
 export default function Cadastro() {
   const { registerUser } = useContext(AuthContext);
 
@@ -17,6 +18,7 @@ export default function Cadastro() {
   async function headleRegister(event: FormEvent) {
     event.preventDefault();
     if (name === "" || email === "" || password === "") {
+      toast.warning("Preenche os campos");
       return;
     }
     setLoading(true);
@@ -25,7 +27,7 @@ export default function Cadastro() {
       email,
       password,
     };
-    registerUser(data);
+    await registerUser(data);
     setLoading(false);
   }
   return (

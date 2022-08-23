@@ -2,7 +2,7 @@ import { createContext, ReactNode, useState } from "react";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 import Router from "next/router";
 import { api } from "../services/apiClient";
-import { type } from "os";
+import { toast } from "react-toastify";
 type AuthContextData = {
   user: userProps | any;
   isAuthenticated: boolean;
@@ -34,7 +34,7 @@ export function signOut() {
   try {
     destroyCookie(undefined, "@pimenta.token");
   } catch {
-    console.log("erro ao deslogar");
+    toast.error("Erro ao sair");
   }
 }
 export function AuthProvider({ children }: AuthProviderProps) {
@@ -54,20 +54,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setUser({ id, name, email });
       //passar para proximas requisicao o nosso token
       api.defaults.headers.common["Authorizatiom"] = `Bearer${tokem}`;
+      toast.success("Bem Vindo " + name);
       Router.push("Dashboard");
     } catch (error) {
-      console.log("Erro de Acesso " + error);
+      toast.error("Erro de Acesso ");
     }
   }
   async function registerUser({ name, email, password }: registerUserProps) {
     try {
-      api.post("/userS", {
+      await api.post("/userS", {
         name,
         email,
         password,
       });
+      toast.success("Cadastrado com sucesso!");
+      toast.success("Faça seu login!");
+      Router.push("/");
     } catch (error) {
-      console.log(error);
+      toast.error("Erro no cadastro!");
     }
   }
   return (

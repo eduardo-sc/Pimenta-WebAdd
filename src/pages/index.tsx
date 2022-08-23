@@ -7,6 +7,9 @@ import logoImagem from "../../public/logo.bmp";
 import { Button } from "../componets/ui/Button";
 import Link from "next/link";
 import { AuthContext } from "../contexts/Authcontext";
+import { toast } from "react-toastify";
+import { GetServerSideProps } from "next";
+import { canSSRGuest } from "../Utils/canSSRGuest";
 export default function Home() {
   const { signIn } = useContext(AuthContext);
   const [email, setEmail] = useState("eduardo@gmail.com");
@@ -16,7 +19,7 @@ export default function Home() {
     event.preventDefault();
 
     if (email === "" || password === "") {
-      alert("Preenche os campos");
+      toast.warning("Preenche os campos");
       return;
     }
     setLoading(true);
@@ -60,3 +63,9 @@ export default function Home() {
     </>
   );
 }
+
+export const getServerSideProps = canSSRGuest(async (ctx) => {
+  return {
+    props: {},
+  };
+});
