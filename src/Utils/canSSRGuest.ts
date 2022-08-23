@@ -1,3 +1,4 @@
+//controle de acesso se tiver cookies
 import {
   GetServerSideProps,
   GetServerSidePropsContext,
@@ -11,7 +12,7 @@ export function canSSRGuest<P>(fn: GetServerSideProps<P>) {
     ctx: GetServerSidePropsContext
   ): Promise<GetServerSidePropsResult<P>> => {
     const cookies = parseCookies(ctx);
-
+    //se tiver cookies sera redirecionado para dela dashboard
     if (cookies["@pimenta.token"]) {
       return {
         redirect: {
