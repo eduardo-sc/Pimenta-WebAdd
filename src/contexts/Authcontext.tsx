@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useState, useEffect } from "react";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 import Router from "next/router";
 import { api } from "../services/apiClient";
@@ -29,14 +29,17 @@ type registerUserProps = {
 type AuthProviderProps = {
   children: ReactNode;
 };
-export const AuthContext = createContext({} as AuthContextData);
 export function signOut() {
   try {
     destroyCookie(undefined, "@pimenta.token");
+    api.defaults.headers.common["Authorization"] = " ";
+    Router.push("/");
   } catch {
     toast.error("Erro ao sair");
   }
 }
+export const AuthContext = createContext({} as AuthContextData);
+
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<userProps>();
   const isAuthenticated = !!user;
@@ -47,22 +50,25 @@ export function AuthProvider({ children }: AuthProviderProps) {
         password,
       });
       const { id, name, tokem } = response.data;
+
       setCookie(undefined, "@pimenta.token", tokem, {
         maxAge: 60 * 60 * 24 * 30,
         part: "/",
       });
+      api.defaults.headers.common["Authorization"] = "Bearer " + tokem;
       setUser({ id, name, email });
       //passar para proximas requisicao o nosso token
-      api.defaults.headers.common["Authorizatiom"] = `Bearer${tokem}`;
+
       toast.success("Bem Vindo " + name);
       Router.push("Dashboard");
     } catch (error) {
       toast.error("Erro de Acesso ");
     }
   }
+
   async function registerUser({ name, email, password }: registerUserProps) {
     try {
-      await api.post("/userS", {
+      await api.post("/users", {
         name,
         email,
         password,
@@ -74,6 +80,36 @@ export function AuthProvider({ children }: AuthProviderProps) {
       toast.error("Erro no cadastro!");
     }
   }
+  useEffect(() => {
+    async function getDetailUser() {
+      const { "@pimenta.token": tokem } = parseCookies();
+
+      if (tokem) {
+        let config = {
+          headers: {
+            Authorization: "Bearer " + tokem,
+          },
+        };
+        await api
+          .get("/detail")
+          .then((response) => {
+            const { id, name, email } = response.data;
+
+            setUser({
+              id,
+              name,
+              email,
+            });
+          })
+          .catch((erro) => {
+            alert(erro);
+            signOut();
+          });
+      }
+    }
+
+    getDetailUser();
+  }, []);
   return (
     <AuthContext.Provider
       value={{ registerUser, user, isAuthenticated, signIn, signOut }}

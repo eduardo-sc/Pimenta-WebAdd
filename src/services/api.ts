@@ -3,11 +3,11 @@ import { parseCookies } from "nookies";
 import { AuthTokenError } from "./errors/AuthTokenError";
 import { signOut } from "../contexts/Authcontext";
 export function configAPICliet(ctx = undefined) {
-  let cookies = parseCookies(ctx);
+  let { "@pimenta.token": tokem } = parseCookies(ctx);
   const api = axios.create({
     baseURL: "https://malagueta.herokuapp.com/",
     headers: {
-      Authorization: `Bearer${cookies["@pimenta.token"]}`,
+      Authorization: `Bearer ${tokem}`,
     },
   });
   api.interceptors.response.use(

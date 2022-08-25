@@ -2,13 +2,13 @@ import { useContext, FormEvent, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../../styles/home.module.scss";
-import { Input, TextArea } from "../componets/ui/Input";
+import { Input } from "../componets/ui/Input";
 import logoImagem from "../../public/logo.bmp";
 import { Button } from "../componets/ui/Button";
 import Link from "next/link";
 import { AuthContext } from "../contexts/Authcontext";
 import { toast } from "react-toastify";
-import { GetServerSideProps } from "next";
+
 import { canSSRGuest } from "../Utils/canSSRGuest";
 export default function Home() {
   const { signIn } = useContext(AuthContext);

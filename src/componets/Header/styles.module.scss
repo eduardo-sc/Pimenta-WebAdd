@@ -1,0 +1,43 @@
+.headerContainer {
+  height: 8rem;
+}
+.headerContent {
+  max-width: 100%;
+  height: 8rem;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  img {
+    cursor: pointer;
+    transition: transform 0.8s;
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+}
+.menuNav {
+  display: flex;
+  align-items: center;
+  a {
+    color: var(--white);
+    padding: 0 0.5rem;
+    display: inline-block;
+    position: relative;
+    transition: color 0.3s;
+
+    &:hover {
+      color: #ff3f4b;
+    }
+  }
+  button {
+    margin-left: 2rem;
+    background: transparent;
+    border: 0;
+    transition: transform 0.8s;
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+}
