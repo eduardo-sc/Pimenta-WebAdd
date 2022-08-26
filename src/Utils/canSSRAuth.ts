@@ -38,5 +38,6 @@ export function canSSRAuth<P>(fn: GetServerSideProps<P>) {
         };
       }
     }
+    return await fn(ctx);
   };
 }
