@@ -11,9 +11,9 @@ export function canSSRGuest<P>(fn: GetServerSideProps<P>) {
   return async (
     ctx: GetServerSidePropsContext
   ): Promise<GetServerSidePropsResult<P>> => {
-    const cookies = parseCookies(ctx);
+    const { "@pimenta.token": tokem } = parseCookies(ctx);
     //se tiver cookies sera redirecionado para dela dashboard
-    if (cookies["@pimenta.token"]) {
+    if (tokem) {
       return {
         redirect: {
           destination: "/Dashboard",

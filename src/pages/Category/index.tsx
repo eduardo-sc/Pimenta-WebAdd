@@ -4,6 +4,7 @@ import { Header } from "../../componets/Header";
 import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { api } from "../../services/apiClient";
+import { canSSRAuth } from "../../Utils/canSSRAuth";
 export default function Category() {
   const [name, setName] = useState("");
 
@@ -15,12 +16,15 @@ export default function Category() {
       return;
     }
     try {
-      api.post("/category", { name }).then(() => {
+      await api.post("/category", { name }).then(() => {
         toast.success("Salvo com sucesso");
         setName("");
       });
-    } catch (error) {}
+    } catch (error) {
+      toast.error("Nao registrado");
+    }
   }
+  //criar lista de itens cadastrado
   return (
     <>
       <Head>
@@ -47,3 +51,9 @@ export default function Category() {
     </>
   );
 }
+
+export const getServerSideProps = canSSRAuth(async (ctx) => {
+  return {
+    props: {},
+  };
+});
