@@ -3,7 +3,7 @@ import { parseCookies } from "nookies";
 import { AuthTokenError } from "./errors/AuthTokenError";
 import { signOut } from "../contexts/Authcontext";
 import { GetServerSideProps } from "next";
-export function setupAPICliet(ctx = undefined) {
+export function setupAPICliet(ctx: undefined | any) {
   let { "@pimenta.token": tokem } = parseCookies(ctx);
 
   const api = axios.create({

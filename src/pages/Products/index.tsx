@@ -60,7 +60,7 @@ export default function Products({ categoryList }: CategoryListProps | any) {
       data.append("category_id", categories[categorySelected].id);
       data.append("file", imgCarregada);
       console.log(data.get);
-      const api = setupAPICliet();
+      const api = setupAPICliet("");
       await api.post("/product", data);
       toast.success("Gravado com Sucesso!");
     } catch (error) {
