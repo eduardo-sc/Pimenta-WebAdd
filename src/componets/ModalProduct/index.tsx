@@ -22,14 +22,15 @@ export default function ModalProduct({
 }: CategoryListProps | any) {
   const customStyles = {
     content: {
-      top: "50%",
+      top: "41%",
       bottom: "auto",
       left: "50%",
-      right: "auto",
+      right: "10%",
       padding: "10px",
       transform: "translate(-50%, -50%)",
       backgroundColor: "#1d1d2e",
       width: "70%",
+      flex: "1",
     },
   };
   const [name, setname] = useState("");
