@@ -69,18 +69,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   async function registerUser({ name, email, password }: registerUserProps) {
-    try {
-      await api.post("/users", {
+    await api
+      .post("/users", {
         name,
         email,
         password,
+      })
+      .then((response) => {
+        toast.success("Cadastrado com sucesso!");
+        toast.success("Faça seu login!");
+        Router.push("/");
+      })
+      .catch((error) => {
+        toast.error(error.response.data.error);
       });
-      toast.success("Cadastrado com sucesso!");
-      toast.success("Faça seu login!");
-      Router.push("/");
-    } catch (error) {
-      toast.error("Erro no cadastro!");
-    }
   }
   useEffect(() => {
     async function getDetailUser() {

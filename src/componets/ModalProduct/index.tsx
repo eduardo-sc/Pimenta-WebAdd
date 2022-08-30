@@ -25,10 +25,11 @@ export default function ModalProduct({
       top: "50%",
       bottom: "auto",
       left: "50%",
-      right: "50px",
-      padding: "30px",
+      right: "auto",
+      padding: "10px",
       transform: "translate(-50%, -50%)",
       backgroundColor: "#1d1d2e",
+      width: "70%",
     },
   };
   const [name, setname] = useState("");

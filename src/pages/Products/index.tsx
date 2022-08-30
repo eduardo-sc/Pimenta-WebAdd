@@ -15,6 +15,7 @@ interface CategoryListProps {
 export default function Products({ categoryList }: CategoryListProps | any) {
   const [modalVisible, setModalVisible] = useState(false);
   const [categories, setCategories] = useState(categoryList || []);
+
   function abrirModal() {
     setModalVisible(true);
   }
@@ -26,6 +27,7 @@ export default function Products({ categoryList }: CategoryListProps | any) {
     <>
       <Header />
       <button onClick={abrirModal}>novoProduto</button>
+
       {modalVisible && (
         <ModalProduct
           data={categories}
