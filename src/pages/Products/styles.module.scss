@@ -1,5 +1,5 @@
 .container {
-  max-width: 70%;
+  max-width: 95%;
   margin: 1rem auto;
   padding: 0 2rem;
 
@@ -15,6 +15,12 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+}
+.containerButton {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
 }
 .listOrder {
   display: flex;
@@ -32,13 +38,14 @@
 
   button {
     border: 0;
-    width: 100%;
+    width: 90%;
     background: transparent;
     font-size: 1.2rem;
     color: var(--white);
     height: 60px;
     align-items: center;
     display: flex;
+    margin-right: 1rem;
   }
 }
 .tag {
@@ -62,4 +69,8 @@
   background: transparent;
   border-width: 0;
   margin-left: 1rem;
+}
+.optionButton {
+  display: flex;
+  flex-direction: row;
 }

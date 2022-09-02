@@ -19,6 +19,7 @@ export default function ModalProduct({
   data,
   isOpen,
   closeModal,
+  dataItemEdit,
 }: CategoryListProps | any) {
   const customStyles = {
     content: {
@@ -32,15 +33,17 @@ export default function ModalProduct({
       width: "70%",
     },
   };
-  const [name, setname] = useState("");
-  const [price, setPrice] = useState("");
-  const [description, setdescription] = useState("");
+
+  const [name, setname] = useState("" || dataItemEdit.name);
+  const [price, setPrice] = useState("" || dataItemEdit.price);
+  const [description, setdescription] = useState(
+    "" || dataItemEdit.description
+  );
   const [imageUrl, setImageUrl] = useState("");
   const [imgCarregada, setimgCarregada] = useState<File | null>(null);
   const [categories, setCategories] = useState(data || []);
   const [categorySelected, setCategorySelected] = useState(0);
-  const [modalVisible, setVisible] = useState(false);
-  console.log(data);
+
   function carregarImage(event: ChangeEvent<HTMLInputElement>) {
     if (!event.target.files) {
       return;
@@ -89,8 +92,15 @@ export default function ModalProduct({
     setdescription("");
     setImageUrl("");
     setimgCarregada(null);
+    fecharModal();
   }
   function fecharModal() {
+    setname(" ");
+    setPrice("");
+    setdescription("");
+    setImageUrl("");
+    setimgCarregada(null);
+
     closeModal();
   }
   return (
