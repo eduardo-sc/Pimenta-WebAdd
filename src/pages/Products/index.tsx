@@ -112,7 +112,7 @@ export default function Products({
 
           {productsItens &&
             productsItens.map((iten: ItensProdProps) => (
-              <article className={styles.listOrder}>
+              <article className={styles.listOrder} key={iten.id}>
                 <section className={styles.orderItem} key={iten.id}>
                   <button onClick={() => AbrirModalAdicional(iten)}>
                     <div className={styles.tag}></div>
