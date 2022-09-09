@@ -1,0 +1,41 @@
+.container {
+  width: 630px;
+  background-color: var(--dark-700);
+  color: var(--white);
+  padding: 1rem 0 0 0;
+}
+.container h2 {
+}
+.containerItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0;
+  padding-bottom: 1rem;
+  span {
+    margin-bottom: 1rem;
+    font-size: 17px;
+  }
+}
+.valor {
+  color: var(--green-900);
+  font-weight: bold;
+}
+.descricao {
+  font-size: 15px;
+  margin-top: 1rem;
+}
+.containerDescricao {
+  display: flex;
+  flex-direction: column;
+}
+.AreaButtonFechar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  h2 {
+    margin: 1rem 0;
+    color: var(--white);
+  }
+}

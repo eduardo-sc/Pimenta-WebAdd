@@ -55,9 +55,11 @@ export default function Home() {
               acessar
             </Button>
           </form>
-          <Link href={"/Cadastrar"}>
-            <a className={styles.text}>Nao tem uma conta ? cadastre-se</a>
-          </Link>
+          {
+            //<Link href={"/Cadastrar"}>
+            //<a className={styles.text}>Nao tem uma conta ? cadastre-se</a>
+            //</Link>
+          }
         </div>
       </div>
     </>

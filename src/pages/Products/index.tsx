@@ -1,13 +1,15 @@
 import Head from "next/head";
-import { useState } from "react";
-import { FiRefreshCcw, FiEdit, FiCheck } from "react-icons/fi";
+import { useEffect, useState } from "react";
+import { FiRefreshCcw, FiEdit, FiCheck, FiTrash } from "react-icons/fi";
 import ReactModal from "react-modal";
+import { toast } from "react-toastify";
 import { Header } from "../../componets/Header";
 import ModalProduct from "../../componets/ModalProduct";
 import { setupAPICliet } from "../../services/api";
+import { api } from "../../services/apiClient";
 import { canSSRAuth } from "../../Utils/canSSRAuth";
 import styles from "./styles.module.scss";
-
+import ModalDescriptionProduct from "../../componets/ModalDescriptionProduct";
 type ItensProps = {
   id: string;
   name: string;
@@ -22,22 +24,25 @@ type ItensProdProps = {
   price: string;
   description: string;
   banner: string;
+  categry_id: string;
 };
 export default function Products({
   categoryList,
   products,
 }: CategoryListProps | any) {
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisibleEdit, setModalVisibleEdit] = useState(false);
+  const [modalVisibleDescription, setModalVisibleDescription] = useState(false);
   const [categories, setCategories] = useState(categoryList || []);
   const [productsItens, setProductsItens] = useState(products || []);
   const [itenClicado, setItemClicado] = useState("");
+  const [objetoAdicional, setObjetoAdicional] = useState<ItensProdProps>();
 
   function abrirModal() {
     setItemClicado("");
-    setModalVisible(true);
+    setModalVisibleEdit(true);
   }
   function fecharModal() {
-    setModalVisible(false);
+    setModalVisibleEdit(false);
   }
   function pegarInformacaoDoProduto(id: string) {
     if (productsItens) {
@@ -46,10 +51,40 @@ export default function Products({
       });
       console.log(item[0]);
       setItemClicado(item[0]);
-      setModalVisible(true);
+      setModalVisibleEdit(true);
     }
   }
   ReactModal.setAppElement("#__next");
+  async function AtualizarProducts() {
+    setProductsItens([]);
+    const response = await api.get("/product/list");
+    setProductsItens(response.data);
+  }
+  function retorno(data: ItensProdProps) {
+    setProductsItens(data);
+  }
+  async function deleteIten(id: string) {
+    try {
+      let response = await api.delete("/product/remove", {
+        params: { product_id: id },
+      });
+      let arrayItens = productsItens.filter((item: ItensProdProps) => {
+        return item.id !== id;
+      });
+      setProductsItens(arrayItens);
+      toast.success("Excluido com sucesso!");
+    } catch (err) {
+      toast.error("Erro excluir item" + err);
+    }
+  }
+  function AbrirModalAdicional(item: ItensProdProps) {
+    setObjetoAdicional(item);
+    setModalVisibleDescription(true);
+  }
+  function fecharModalDesc() {
+    setModalVisibleDescription(false);
+  }
+
   return (
     <>
       <Head>
@@ -62,7 +97,10 @@ export default function Products({
           <div className={styles.containerHeader}>
             <h1>Produtos</h1>
 
-            <button className={styles.buttonAtualizar}>
+            <button
+              className={styles.buttonAtualizar}
+              onClick={AtualizarProducts}
+            >
               <FiRefreshCcw size={25} color={"#3fffa3"} />
             </button>
           </div>
@@ -71,11 +109,12 @@ export default function Products({
               Novo
             </button>
           </div>
+
           {productsItens &&
             productsItens.map((iten: ItensProdProps) => (
               <article className={styles.listOrder}>
                 <section className={styles.orderItem} key={iten.id}>
-                  <button>
+                  <button onClick={() => AbrirModalAdicional(iten)}>
                     <div className={styles.tag}></div>
                     <span>{iten.name}</span>
                   </button>
@@ -86,8 +125,8 @@ export default function Products({
                     >
                       <FiEdit size={25} color={"#fff"} />
                     </button>
-                    <button className={""}>
-                      <FiCheck size={25} color={"#3fffa3"} />
+                    <button className={""} onClick={() => deleteIten(iten.id)}>
+                      <FiTrash size={25} color={"#ff3f4b"} />
                     </button>
                   </div>
                 </section>
@@ -96,12 +135,21 @@ export default function Products({
         </main>
       </div>
 
-      {modalVisible && (
+      {modalVisibleEdit && (
         <ModalProduct
-          data={categories}
+          category={categories}
           dataItemEdit={itenClicado}
-          isOpen={modalVisible}
+          isOpen={modalVisibleEdit}
           closeModal={fecharModal}
+          data={productsItens}
+          returnData={retorno}
+        />
+      )}
+      {modalVisibleDescription && (
+        <ModalDescriptionProduct
+          isOpen={modalVisibleDescription}
+          closeModal={fecharModalDesc}
+          data={objetoAdicional}
         />
       )}
     </>

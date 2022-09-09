@@ -1,13 +1,14 @@
 import Head from "next/head";
-import { Header } from "../../componets/Header";
+import { Header } from "../Header";
 import { canSSRAuth } from "../../Utils/canSSRAuth";
 import { FiUpload } from "react-icons/fi";
 import styles from "./styles.module.scss";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { setupAPICliet } from "../../services/api";
 
 import { toast } from "react-toastify";
 import Modal from "react-modal";
+import { api } from "../../services/apiClient";
 type ItensProps = {
   id: string;
   name: string;
@@ -16,10 +17,12 @@ interface CategoryListProps {
   CategoryProps: ItensProps[];
 }
 export default function ModalProduct({
+  category,
   data,
   isOpen,
   closeModal,
   dataItemEdit,
+  returnData,
 }: CategoryListProps | any) {
   const customStyles = {
     content: {
@@ -33,7 +36,9 @@ export default function ModalProduct({
       width: "70%",
     },
   };
-
+  const [itensAtualizado, setItensAtualizado] = useState<ItensProps[]>(
+    [] || data
+  );
   const [name, setname] = useState("" || dataItemEdit.name);
   const [price, setPrice] = useState("" || dataItemEdit.price);
   const [description, setdescription] = useState(
@@ -41,9 +46,20 @@ export default function ModalProduct({
   );
   const [imageUrl, setImageUrl] = useState("");
   const [imgCarregada, setimgCarregada] = useState<File | null>(null);
-  const [categories, setCategories] = useState(data || []);
+  const [categories, setCategories] = useState(category || []);
   const [categorySelected, setCategorySelected] = useState(0);
+  const [itensProducts, setItensProducts] = useState(data || []);
 
+  useEffect(() => {
+    if (dataItemEdit) {
+      let index = category.findIndex((itens: ItensProps) => {
+        //pegando index da categoria para fixa na tela de edit
+        return itens.id === dataItemEdit.category_id;
+      });
+
+      setCategorySelected(index);
+    }
+  }, []);
   function carregarImage(event: ChangeEvent<HTMLInputElement>) {
     if (!event.target.files) {
       return;
@@ -62,8 +78,46 @@ export default function ModalProduct({
   }
   async function registerProduct(event: FormEvent) {
     event.preventDefault();
+    if (dataItemEdit) {
+      let itemExiste = data.filter((item: any) => {
+        return item.id === dataItemEdit.id;
+      });
+      if (itemExiste.length) {
+        const data = new FormData();
+        //
+        data.append("product_id", dataItemEdit.id);
+        data.append("name", name);
+        data.append("price", price);
+        data.append("description", description);
+        data.append("category_id", categories[categorySelected].id);
+        data.append("file", imgCarregada);
+
+        try {
+          let response = await api.put("/product/update", data);
+          let respostaAtualizada = itensProducts.filter((item: ItensProps) => {
+            return item.id !== dataItemEdit.id;
+          });
+
+          let data2 = {
+            id: response.data.id,
+            name: response.data.name,
+            price: response.data.price,
+            description: response.data.description,
+            category_id: categories[categorySelected].id,
+            banner: response.data.banner,
+          };
+          respostaAtualizada.unshift(data2);
+          returnData(respostaAtualizada);
+          closeModal();
+        } catch (error) {
+          console.log("erro : " + error);
+        }
+      }
+      return;
+    }
 
     try {
+      console.log("entrou aqui");
       if (
         name === "" ||
         price === "" ||
@@ -81,7 +135,19 @@ export default function ModalProduct({
       data.append("file", imgCarregada);
 
       const api = setupAPICliet("");
-      await api.post("/product", data);
+      let response = await api.post("/product", data);
+      let data2 = {
+        id: response.data.id,
+        name: response.data.name,
+        price: response.data.price,
+        description: response.data.description,
+        category_id: categories[categorySelected].id,
+        banner: response.data.banner,
+      };
+
+      let respostaAtualizada = itensProducts;
+      respostaAtualizada.unshift(data2);
+      returnData(respostaAtualizada);
       toast.success("Gravado com Sucesso!");
     } catch (error) {
       toast.error("Erro ao cadastrar produto");
