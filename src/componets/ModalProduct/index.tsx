@@ -83,8 +83,18 @@ export default function ModalProduct({
         return item.id === dataItemEdit.id;
       });
       if (itemExiste.length) {
+        if (
+          name === "" ||
+          price === "" ||
+          description === "" ||
+          imgCarregada === null
+        ) {
+          toast.warning("Campos do Formulario esta vasio");
+          return;
+        }
+
         const data = new FormData();
-        //
+
         data.append("product_id", dataItemEdit.id);
         data.append("name", name);
         data.append("price", price);
