@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { canSSRGuest } from "../Utils/canSSRGuest";
 export default function Home() {
   const { signIn } = useContext(AuthContext);
-  const [email, setEmail] = useState("eduardo@gmail.com");
+  const [email, setEmail] = useState("luci@gmail.com");
   const [password, setpassword] = useState("111111");
   const [loading, setLoading] = useState(false);
   async function handlerLogin(event: FormEvent) {
@@ -27,8 +27,12 @@ export default function Home() {
       email,
       password,
     };
-    await signIn(data);
-    setLoading(false);
+    try {
+      await signIn(data);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
   }
   return (
     <>
@@ -38,7 +42,7 @@ export default function Home() {
       <div className={styles.contarneCenter}>
         <Image src={logoImagem} width={425} height={155} />
         <div className={styles.login}>
-          <form onSubmit={handlerLogin}>
+          <form onSubmit={handlerLogin} autoComplete={"off"}>
             <Input
               placeholder="Digite seu email"
               type="text"
@@ -47,6 +51,7 @@ export default function Home() {
             />
             <Input
               placeholder="Digite sua password"
+              autoComplete={"off"}
               type={"password"}
               value={password}
               onChange={(e) => setpassword(e.target.value)}

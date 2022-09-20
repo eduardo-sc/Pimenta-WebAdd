@@ -10,6 +10,7 @@ import { api } from "../../services/apiClient";
 import { canSSRAuth } from "../../Utils/canSSRAuth";
 import styles from "./styles.module.scss";
 import ModalDescriptionProduct from "../../componets/ModalDescriptionProduct";
+
 type ItensProps = {
   id: string;
   name: string;
@@ -36,6 +37,10 @@ export default function Products({
   const [productsItens, setProductsItens] = useState(products || []);
   const [itenClicado, setItemClicado] = useState("");
   const [objetoAdicional, setObjetoAdicional] = useState<ItensProdProps>();
+  const [pesquisaText, setPesquisaText] = useState("");
+  const [produtosPesquisaItens, setProdutosPesquisaItens] = useState<
+    ItensProdProps | any
+  >(productsItens);
 
   function abrirModal() {
     setItemClicado("");
@@ -49,29 +54,30 @@ export default function Products({
       let item = productsItens.filter((item: ItensProdProps) => {
         return item.id === id;
       });
-      console.log(item[0]);
+
       setItemClicado(item[0]);
       setModalVisibleEdit(true);
     }
   }
   ReactModal.setAppElement("#__next");
   async function AtualizarProducts() {
-    setProductsItens([]);
+    setProdutosPesquisaItens([]);
     const response = await api.get("/product/list");
-    setProductsItens(response.data);
+    setProdutosPesquisaItens(response.data);
   }
   function retorno(data: ItensProdProps) {
-    setProductsItens(data);
+    setProdutosPesquisaItens(data);
   }
   async function deleteIten(id: string) {
     try {
       let response = await api.delete("/product/remove", {
         params: { product_id: id },
       });
-      let arrayItens = productsItens.filter((item: ItensProdProps) => {
+      let arrayItens = produtosPesquisaItens.filter((item: ItensProdProps) => {
         return item.id !== id;
       });
-      setProductsItens(arrayItens);
+
+      setProdutosPesquisaItens(arrayItens);
       toast.success("Excluido com sucesso!");
     } catch (err) {
       toast.error("Erro excluir item" + err);
@@ -85,6 +91,21 @@ export default function Products({
     setModalVisibleDescription(false);
   }
 
+  useEffect(() => {
+    function pesquisaProduto() {
+      if (pesquisaText) {
+        let itensPesquisados = productsItens.filter((item: ItensProdProps) => {
+          return item.name.toLowerCase().match(pesquisaText.toLowerCase());
+        });
+
+        setProdutosPesquisaItens(itensPesquisados);
+      }
+      if (!pesquisaText) {
+        setProdutosPesquisaItens(productsItens);
+      }
+    }
+    pesquisaProduto();
+  }, [pesquisaText]);
   return (
     <>
       <Head>
@@ -105,33 +126,38 @@ export default function Products({
             </button>
           </div>
           <div className={styles.containerButton}>
+            <input
+              type={"text"}
+              value={pesquisaText}
+              placeholder={"Pesquisar"}
+              onChange={(e) => setPesquisaText(e.target.value)}
+            />
             <button className={styles.buttonNovo} onClick={abrirModal}>
               Novo
             </button>
           </div>
 
-          {productsItens &&
-            productsItens.map((iten: ItensProdProps) => (
-              <article className={styles.listOrder} key={iten.id}>
-                <section className={styles.orderItem} key={iten.id}>
-                  <button onClick={() => AbrirModalAdicional(iten)}>
-                    <div className={styles.tag}></div>
-                    <span>{iten.name}</span>
+          {produtosPesquisaItens.map((iten: ItensProdProps) => (
+            <article className={styles.listOrder} key={iten.id}>
+              <section className={styles.orderItem} key={iten.id}>
+                <button onClick={() => AbrirModalAdicional(iten)}>
+                  <div className={styles.tag}></div>
+                  <span>{iten.name}</span>
+                </button>
+                <div className={styles.optionButton}>
+                  <button
+                    className={""}
+                    onClick={() => pegarInformacaoDoProduto(iten.id)}
+                  >
+                    <FiEdit size={25} color={"#fff"} />
                   </button>
-                  <div className={styles.optionButton}>
-                    <button
-                      className={""}
-                      onClick={() => pegarInformacaoDoProduto(iten.id)}
-                    >
-                      <FiEdit size={25} color={"#fff"} />
-                    </button>
-                    <button className={""} onClick={() => deleteIten(iten.id)}>
-                      <FiTrash size={25} color={"#ff3f4b"} />
-                    </button>
-                  </div>
-                </section>
-              </article>
-            ))}
+                  <button onClick={() => deleteIten(iten.id)}>
+                    <FiTrash size={25} color={"#ff3f4b"} />
+                  </button>
+                </div>
+              </section>
+            </article>
+          ))}
         </main>
       </div>
 

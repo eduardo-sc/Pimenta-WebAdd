@@ -9,7 +9,6 @@ type AuthContextData = {
   signIn: (credenciais: signinProps) => Promise<void>;
 
   signOut: () => void;
-  registerUser: (data: registerUserProps) => Promise<void>;
 };
 
 type userProps = {
@@ -25,6 +24,7 @@ type registerUserProps = {
   name: string;
   email: string;
   password: string;
+  permission_id: string;
 };
 type AuthProviderProps = {
   children: ReactNode;
@@ -46,7 +46,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   async function signIn({ email, password }: signinProps) {
     try {
       const response = await api
-        .post("/session", {
+        .post("/session/", {
           email,
           password,
         })
@@ -56,7 +56,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             maxAge: 60 * 60 * 24 * 30,
             part: "/",
           });
-          api.defaults.headers.common["Authorization"] = "Bearer " + tokem;
+          api.defaults.headers.common["Authorization"] = "Bearer :" + tokem;
           setUser({ id, name, email });
           //passar para proximas requisicao o nosso token
 
@@ -64,26 +64,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
           toast.success("Bem Vindo " + name);
         });
     } catch (error) {
-      toast.error("Erro de Acesso ");
+      toast.error(error.response.data.error);
     }
   }
 
-  async function registerUser({ name, email, password }: registerUserProps) {
-    await api
-      .post("/users", {
-        name,
-        email,
-        password,
-      })
-      .then((response) => {
-        toast.success("Cadastrado com sucesso!");
-        toast.success("Faça seu login!");
-        Router.push("/");
-      })
-      .catch((error) => {
-        toast.error(error.response.data.error);
-      });
-  }
   useEffect(() => {
     async function getDetailUser() {
       const { "@pimenta.token": tokem } = parseCookies();
@@ -115,9 +99,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     getDetailUser();
   }, []);
   return (
-    <AuthContext.Provider
-      value={{ registerUser, user, isAuthenticated, signIn, signOut }}
-    >
+    <AuthContext.Provider value={{ user, isAuthenticated, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );

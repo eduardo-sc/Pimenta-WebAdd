@@ -5,7 +5,7 @@ import { FiUpload } from "react-icons/fi";
 import styles from "./styles.module.scss";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { setupAPICliet } from "../../services/api";
-
+import { Button } from "../../componets/ui/Button";
 import { toast } from "react-toastify";
 import Modal from "react-modal";
 import { api } from "../../services/apiClient";
@@ -29,11 +29,11 @@ export default function ModalProduct({
       top: "50%",
       bottom: "auto",
       left: "50%",
-      right: "auto",
-      padding: "15px",
+      right: "50%",
+      padding: "10px",
       transform: "translate(-50%, -50%)",
       backgroundColor: "#1d1d2e",
-      width: "70%",
+      width: "69%",
     },
   };
   const [itensAtualizado, setItensAtualizado] = useState<ItensProps[]>(
@@ -44,19 +44,24 @@ export default function ModalProduct({
   const [description, setdescription] = useState(
     "" || dataItemEdit.description
   );
-  const [imageUrl, setImageUrl] = useState("");
+
+  const [imageUrl, setImageUrl] = useState(
+    dataItemEdit.banner
+      ? `http://20.200.220.100:3333/files/${dataItemEdit.banner}`
+      : ""
+  );
   const [imgCarregada, setimgCarregada] = useState<File | null>(null);
   const [categories, setCategories] = useState(category || []);
   const [categorySelected, setCategorySelected] = useState(0);
   const [itensProducts, setItensProducts] = useState(data || []);
-
+  const [loading, setLoading] = useState(false);
+  console.log(categories[categorySelected].id);
   useEffect(() => {
     if (dataItemEdit) {
       let index = category.findIndex((itens: ItensProps) => {
         //pegando index da categoria para fixa na tela de edit
         return itens.id === dataItemEdit.category_id;
       });
-
       setCategorySelected(index);
     }
   }, []);
@@ -78,6 +83,7 @@ export default function ModalProduct({
   }
   async function registerProduct(event: FormEvent) {
     event.preventDefault();
+
     if (dataItemEdit) {
       let itemExiste = data.filter((item: any) => {
         return item.id === dataItemEdit.id;
@@ -107,7 +113,7 @@ export default function ModalProduct({
           let respostaAtualizada = itensProducts.filter((item: ItensProps) => {
             return item.id !== dataItemEdit.id;
           });
-
+          setLoading(true);
           let data2 = {
             id: response.data.id,
             name: response.data.name,
@@ -118,6 +124,7 @@ export default function ModalProduct({
           };
           respostaAtualizada.unshift(data2);
           returnData(respostaAtualizada);
+
           closeModal();
         } catch (error) {
           console.log("erro : " + error);
@@ -127,7 +134,6 @@ export default function ModalProduct({
     }
 
     try {
-      console.log("entrou aqui");
       if (
         name === "" ||
         price === "" ||
@@ -137,6 +143,7 @@ export default function ModalProduct({
         toast.warning("Campos do Formulario esta vasio");
         return;
       }
+      setLoading(true);
       const data = new FormData();
       data.append("name", name);
       data.append("price", price);
@@ -156,7 +163,7 @@ export default function ModalProduct({
       };
 
       let respostaAtualizada = itensProducts;
-      respostaAtualizada.unshift(data2);
+      respostaAtualizada.unshift(respostaAtualizada);
       returnData(respostaAtualizada);
       toast.success("Gravado com Sucesso!");
     } catch (error) {
@@ -169,6 +176,7 @@ export default function ModalProduct({
     setImageUrl("");
     setimgCarregada(null);
     fecharModal();
+    setLoading(false);
   }
   function fecharModal() {
     setname(" ");
@@ -185,30 +193,32 @@ export default function ModalProduct({
         <title>Novo Produtos Pimenta-Malagueta</title>
       </Head>
 
-      <div>
-        <Modal isOpen={isOpen} style={customStyles}>
-          <main className={styles.container}>
-            <h1>Novo Produto</h1>
-            <form className={styles.form} onSubmit={registerProduct}>
-              <label className={styles.label}>
-                <span>
-                  <FiUpload size={25} color={"#fff"} />
-                </span>
-                {imageUrl && (
-                  <img
-                    className={styles.preview}
-                    width={250}
-                    height={250}
-                    src={imageUrl}
-                    alt="foto selecionada"
-                  />
-                )}
-                <input
-                  type={"file"}
-                  accept={"image/pnd , image/jpeg"}
-                  onChange={carregarImage}
+      <Modal isOpen={isOpen} style={customStyles}>
+        <main className={styles.container}>
+          <h1>Novo Produto</h1>
+          <form className={styles.form} onSubmit={registerProduct}>
+            <label className={styles.label}>
+              <span>
+                <FiUpload size={25} color={"#fff"} />
+              </span>
+
+              {imageUrl && (
+                <img
+                  className={styles.preview}
+                  width={250}
+                  height={250}
+                  src={imageUrl}
+                  alt="foto selecionada"
                 />
-              </label>
+              )}
+
+              <input
+                type={"file"}
+                accept={"image/pnd , image/jpeg"}
+                onChange={carregarImage}
+              />
+            </label>
+            <div className={styles.divEdit}>
               <select value={categorySelected} onChange={pegarCategoryselected}>
                 {categories.map((item: ItensProps, index: any) => {
                   return (
@@ -238,9 +248,14 @@ export default function ModalProduct({
                 value={description}
                 onChange={(e) => setdescription(e.target.value)}
               />
-              <button className={styles.buttonAdd} type={"submit"}>
+
+              <Button
+                className={styles.buttonAdd}
+                type={"submit"}
+                loading={loading}
+              >
                 cadastrar
-              </button>
+              </Button>
               <button
                 className={styles.buttonClose}
                 type={"button"}
@@ -248,10 +263,10 @@ export default function ModalProduct({
               >
                 Fechar
               </button>
-            </form>
-          </main>
-        </Modal>
-      </div>
+            </div>
+          </form>
+        </main>
+      </Modal>
     </>
   );
 }

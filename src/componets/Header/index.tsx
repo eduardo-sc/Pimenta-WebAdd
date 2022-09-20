@@ -24,6 +24,9 @@ export function Header() {
           <Link href={"/Pedidos"}>
             <a>Pedidos</a>
           </Link>
+          <Link href={"/Usuario"}>
+            <a>Usuarios</a>
+          </Link>
           <button onClick={signOut}>
             <FiLogOut fontSize={23} color="#fff" />
           </button>

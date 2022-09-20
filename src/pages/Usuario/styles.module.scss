@@ -1,0 +1,84 @@
+.container {
+  max-width: 95%;
+  margin: 1rem auto;
+  padding: 0 2rem;
+
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+.container h1 {
+  color: var(--white);
+}
+
+.containerHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.containerButton {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+  input {
+    margin-right: 1rem;
+    border-radius: 0.3rem;
+    background-color: var(--dark-900);
+    padding-left: 1rem;
+    color: var(--white);
+    border: 0;
+  }
+}
+.listOrder {
+  display: flex;
+  flex-direction: column;
+  margin: 0.3rem 0;
+}
+.orderItem {
+  display: flex;
+  flex-direction: row;
+  background-color: var(--dark-900);
+  margin-bottom: 1px;
+  align-items: center;
+
+  border-radius: 0.3rem;
+
+  button {
+    border: 0;
+    width: 90%;
+    background: transparent;
+    font-size: 1.2rem;
+    color: var(--white);
+    height: 60px;
+    align-items: center;
+    display: flex;
+    margin-right: 1rem;
+  }
+}
+.tag {
+  height: 60px;
+  width: 6px;
+  background-color: var(--green-900);
+  border-radius: 6px 0 0 6px;
+  margin-right: 1rem;
+}
+.buttonNovo {
+  height: 40px;
+  padding: 0 25px;
+  border: 0;
+  background-color: var(--green-900);
+  font-weight: bolder;
+  font-size: 1.2rem;
+  border-radius: 0.3rem;
+  color: var(--dark-700);
+}
+.buttonAtualizar {
+  background: transparent;
+  border-width: 0;
+  margin-left: 1rem;
+}
+.optionButton {
+  display: flex;
+  flex-direction: row;
+}
