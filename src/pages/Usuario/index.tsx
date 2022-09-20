@@ -103,8 +103,9 @@ export default function Usuario({
           permissionList={permissionListData}
           close={closeTela}
           dataItemEdit={itenClicado}
-          data={user}
+          data={userlist}
           atualizarListaUser={atualizarlistaUsuario}
+          user={[]}
         />
       ) : (
         <main className={styles.container}>
