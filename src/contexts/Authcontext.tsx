@@ -44,28 +44,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<userProps>();
   const isAuthenticated = !!user;
   async function signIn({ email, password }: signinProps) {
-    try {
-      const response = await api
-        .post("/session/", {
-          email,
-          password,
-        })
-        .then((response) => {
-          const { id, name, tokem } = response.data;
-          setCookie(undefined, "@pimenta.token", tokem, {
-            maxAge: 60 * 60 * 24 * 30,
-            part: "/",
-          });
-          api.defaults.headers.common["Authorization"] = "Bearer :" + tokem;
-          setUser({ id, name, email });
-          //passar para proximas requisicao o nosso token
-
-          Router.push("Dashboard");
-          toast.success("Bem Vindo " + name);
+    const response = await api
+      .post("/session/", {
+        email,
+        password,
+      })
+      .then((response) => {
+        const { id, name, tokem } = response.data;
+        setCookie(undefined, "@pimenta.token", tokem, {
+          maxAge: 60 * 60 * 24 * 30,
+          part: "/",
         });
-    } catch (error) {
-      toast.error(error.response.data.error);
-    }
+        api.defaults.headers.common["Authorization"] = "Bearer :" + tokem;
+        setUser({ id, name, email });
+        //passar para proximas requisicao o nosso token
+
+        Router.push("Dashboard");
+        toast.success("Bem Vindo " + name);
+      })
+      .catch((error) => {
+        toast.error(error.response.data.error);
+      });
   }
 
   useEffect(() => {
