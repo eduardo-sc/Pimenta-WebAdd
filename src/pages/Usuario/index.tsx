@@ -9,6 +9,8 @@ import { FiEdit, FiRefreshCcw, FiTrash } from "react-icons/fi";
 
 import CadastroUser from "../../componets/CadastroUser";
 import { api } from "../../services/apiClient";
+import ReactModal from "react-modal";
+import ModalDetalheUsuario from "../../componets/ModalDetalheUsuario";
 
 type UserProps = {
   id: string;
@@ -33,7 +35,8 @@ export default function Usuario({
   const [abrir, setAbrir] = useState(false);
   const [itenClicado, setItemClicado] = useState<UserProps>();
   const [pesquisaText, setPesquisaText] = useState("");
-  const [idItemEdit, setidItemEdit] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [itemSelect, setItemSelect] = useState<UserProps>();
 
   function closeTela() {
     setAbrir(false);
@@ -74,7 +77,10 @@ export default function Usuario({
     setUserList(item);
     setUserProps(item);
   }
-
+  function AbrirModalDetalhes(item: UserProps) {
+    setModalVisible(true);
+    setItemSelect(item);
+  }
   useEffect(() => {
     function pesquisaProduto() {
       if (pesquisaText) {
@@ -90,6 +96,8 @@ export default function Usuario({
     }
     pesquisaProduto();
   }, [pesquisaText]);
+
+  ReactModal.setAppElement("#__next");
   return (
     <>
       <Head>
@@ -105,7 +113,6 @@ export default function Usuario({
           dataItemEdit={itenClicado}
           data={userlist}
           atualizarListaUser={atualizarlistaUsuario}
-          user={[]}
         />
       ) : (
         <main className={styles.container}>
@@ -130,7 +137,7 @@ export default function Usuario({
           {userlist.map((item: UserProps) => (
             <article className={styles.listOrder} key={item.id}>
               <section className={styles.orderItem} key={item.id}>
-                <button>
+                <button onClick={() => AbrirModalDetalhes(item)}>
                   <div className={styles.tag}></div>
                   <span>{item.name}</span>
                 </button>
@@ -138,17 +145,25 @@ export default function Usuario({
                   <button className={""} onClick={() => alterarCadastro(item)}>
                     <FiEdit size={25} color={"#fff"} />
                   </button>
-                  <button
+                  {/* <button
                     className={""}
                     onClick={() => ExcluirUsuario(item.id)}
                   >
                     <FiTrash size={25} color={"#ff3f4b"} />
-                  </button>
+                  </button> */}
                 </div>
               </section>
             </article>
           ))}
         </main>
+      )}
+      {modalVisible && (
+        <ModalDetalheUsuario
+          isOpen={modalVisible}
+          closeModal={() => setModalVisible(false)}
+          userData={itemSelect}
+          permissionListData={permissionListData}
+        />
       )}
     </>
   );

@@ -19,7 +19,6 @@ type PermissionProps = {
   description: string;
 };
 interface PermissonListProps {
-  user: UserProps[];
   permissionList: PermissionProps[];
   dataItemEdit: UserProps | any;
   atualizarListaUser: (user: UserProps[]) => void;
@@ -65,13 +64,14 @@ export default function CadastroUser({
       })
 
       .then((res) => {
+        console.log(res.data);
         let dataResponse = {
           id: res.data.id,
           name: res.data.name,
           email: res.data.email,
-          permission_id: res.data.permission_id,
+          permission_id: res.data.permission.id,
         };
-
+        console.log(dataResponse);
         let respostaAtualizada = dataUser;
         respostaAtualizada.unshift(dataResponse);
         atualizarListaUser(respostaAtualizada);
