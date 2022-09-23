@@ -17,7 +17,7 @@ interface BaseProps {
   userData: UserProps | any;
   permissionListData: PermissionProps[];
   closeModal: () => void;
-  isOpen: () => Boolean;
+  isOpen?: Boolean | any;
 }
 export default function ModalDetalheUsuario({
   isOpen,
@@ -26,7 +26,7 @@ export default function ModalDetalheUsuario({
   permissionListData,
 }: BaseProps) {
   const [itemUser, setItemUser] = useState<UserProps>(userData);
-  const [visible, setVisible] = useState(isOpen);
+  const [visible, setVisible] = useState<boolean>(isOpen);
   const [permisson, setPermission] = useState<PermissionProps>();
   const customStyles = {
     content: {
@@ -49,7 +49,7 @@ export default function ModalDetalheUsuario({
     setPermission(permissao[0]);
   }, []);
   return (
-    <ReactModal isOpen={visible} style={customStyles}>
+    <ReactModal isOpen={true} style={customStyles}>
       <div className={styles.AreaButtonFechar}>
         <h2>Detalhes do Usuário</h2>
         <button
