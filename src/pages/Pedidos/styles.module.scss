@@ -1,19 +1,45 @@
 .container {
-  max-width: 70%;
-  margin: 4rem auto;
-  padding: 0 2rem;
-
   display: flex;
-  justify-content: space-between;
-  flex-direction: column;
+  max-width: 100%;
 }
-.container h1 {
-  color: var(--white);
+
+.item1 {
+  height: 45rem;
+  width: 25%;
+  padding-left: 25px;
+}
+.item2 {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  height: 45rem;
+  width: 70%;
+  margin-left: 25px;
+  overflow-x: scroll;
+  scroll-behavior: initial;
+  background-color: var(--dark-900);
+  border-radius: 0.3rem;
+  padding: 25px;
+  h1 {
+    color: var(--white);
+  }
+  &::-webkit-scrollbar {
+    width: 0px;
+  }
+  scrollbar-width: none;
 }
 
 .containerHeader {
   display: flex;
   flex-direction: row;
+  width: 25%;
+  justify-content: center;
+  margin-bottom: 25px;
+
+  h1 {
+    color: var(--white);
+  }
   button {
     background: transparent;
     border-width: 0;
@@ -23,13 +49,13 @@
 .listOrder {
   display: flex;
   flex-direction: column;
-  margin: 1rem 0;
 }
 .orderItem {
   display: flex;
   flex-direction: row;
   background-color: var(--dark-900);
-  margin-bottom: 1rem;
+  width: 100%;
+  margin-bottom: 0.5rem;
   align-items: center;
   border-radius: 0.3rem;
 
@@ -50,4 +76,26 @@
   background-color: var(--green-900);
   border-radius: 6px 0 0 6px;
   margin-right: 1rem;
+}
+///
+///
+///
+.orderItemProd {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  border-bottom: solid;
+  border-radius: 0.3rem;
+  border-color: var(--dark-700);
+
+  span {
+    color: var(--white);
+    font-size: 25px;
+    margin-bottom: 25px;
+  }
+}
+.listOrdem {
+  width: 100%;
+  margin-top: 1rem;
 }

@@ -1,0 +1,21 @@
+{
+        "id": 
+        "table": 
+        "status": 
+        "draft": 
+        "name": 
+        "created_at": 
+        "itens": [
+            {
+                "product": {
+                    "id": ,
+                    "name": ,
+                    "price": ,
+                    "description": ,
+                    "banner": ,
+                    "category_id": 
+                },
+                "amount": 
+            }
+        ]
+    },
