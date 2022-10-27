@@ -1,0 +1,116 @@
+.container {
+  display: flex;
+
+  max-width: 100%;
+  height: 100%;
+  padding: 5px;
+}
+.containerMesas {
+  background-color: aqua;
+  border-radius: 0.3rem;
+  margin-left: 0.3rem;
+  height: 45rem;
+  width: 25%;
+  padding-left: 25px;
+  overflow-x: scroll;
+  scroll-behavior: initial;
+  &::-webkit-scrollbar {
+    width: 0px;
+  }
+  scrollbar-width: none;
+}
+.listOrder {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1px;
+  width: 95%;
+  margin-right: 1px;
+}
+.listOrder {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1px;
+  margin-right: 1px;
+}
+.orderItem {
+  display: flex;
+  flex-direction: row;
+  background-color: var(--dark-900);
+  width: 100%;
+  margin-bottom: 0.5rem;
+  align-items: center;
+  border-radius: 0.3rem;
+
+  button {
+    border: 0;
+    width: 100%;
+    background: transparent;
+    font-size: 1.2rem;
+    color: var(--white);
+    height: 60px;
+    align-items: center;
+    display: flex;
+    margin-right: 1rem;
+  }
+}
+
+.tag {
+  height: 60px;
+  width: 6px;
+  background-color: var(--green-900);
+  border-radius: 6px 0 0 6px;
+  margin-right: 1rem;
+}
+.orderProduc {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+.orderitemProps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: deeppink;
+  height: 20px;
+  width: 80%;
+  margin-bottom: 1rem;
+}
+.containerItens {
+  background-color: blue;
+  height: 45rem;
+  width: 73%;
+  margin-left: 25px;
+  border-radius: 0.3rem;
+  padding: 10px;
+}
+.itens {
+  background-color: chocolate;
+  height: 75%;
+}
+.subTotal {
+  display: flex;
+  padding: 10px;
+  align-items: center;
+  justify-content: flex-end;
+  background-color: blueviolet;
+  height: 10%;
+}
+.divButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 15%;
+  background-color: darkgreen;
+  button {
+    height: 70%;
+    width: 25%;
+  }
+}
+.cabecalhoItens {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: deeppink;
+  height: 20px;
+  width: 80%;
+  margin-bottom: 1rem;
+}

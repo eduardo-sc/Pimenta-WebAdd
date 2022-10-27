@@ -5,6 +5,8 @@ import Image from "next/image";
 import { FiLogOut } from "react-icons/fi";
 import { AuthContext } from "../../contexts/Authcontext";
 import { useContext } from "react";
+import Router from "next/router";
+import NProgress from "nprogress";
 export function Header() {
   const { signOut } = useContext(AuthContext);
   return (
@@ -26,6 +28,9 @@ export function Header() {
           </Link>
           <Link href={"/Usuario"}>
             <a>Usuarios</a>
+          </Link>
+          <Link href={"/Pagamento"}>
+            <a>Caixa</a>
           </Link>
           <button onClick={signOut}>
             <FiLogOut fontSize={23} color="#fff" />

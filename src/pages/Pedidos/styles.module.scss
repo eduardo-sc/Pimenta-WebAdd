@@ -7,6 +7,12 @@
   height: 45rem;
   width: 25%;
   padding-left: 25px;
+  overflow-x: scroll;
+  scroll-behavior: initial;
+  &::-webkit-scrollbar {
+    width: 0px;
+  }
+  scrollbar-width: none;
 }
 .item2 {
   display: flex;
@@ -14,7 +20,7 @@
   flex-direction: column;
 
   height: 45rem;
-  width: 70%;
+  width: 60%;
   margin-left: 25px;
   overflow-x: scroll;
   scroll-behavior: initial;
@@ -49,6 +55,8 @@
 .listOrder {
   display: flex;
   flex-direction: column;
+  margin-left: 1px;
+  margin-right: 1px;
 }
 .orderItem {
   display: flex;
@@ -61,13 +69,14 @@
 
   button {
     border: 0;
-    width: 100%;
+    width: 90%;
     background: transparent;
     font-size: 1.2rem;
     color: var(--white);
     height: 60px;
     align-items: center;
     display: flex;
+    margin-right: 1rem;
   }
 }
 .tag {
@@ -94,8 +103,84 @@
     font-size: 25px;
     margin-bottom: 25px;
   }
+  button {
+    border: 0;
+    width: 90%;
+    background: transparent;
+    font-size: 1.2rem;
+    color: var(--white);
+    height: 60px;
+    align-items: center;
+    display: flex;
+    margin-right: 1rem;
+  }
 }
 .listOrdem {
-  width: 100%;
+  width: 95%;
   margin-top: 1rem;
+}
+@media (max-width: 1024px) {
+  .containerHeader {
+    h1 {
+      font-size: 70.7%;
+    }
+  }
+  .container {
+    max-width: 100%;
+  }
+  .orderItem {
+    max-width: 100%;
+    button {
+      font-size: 70.7%;
+    }
+  }
+  .orderItemProd {
+    span {
+      font-size: 80%;
+    }
+  }
+}
+.optionButton {
+  display: flex;
+  margin-bottom: 1rem;
+  width: 100%;
+  justify-content: flex-end;
+
+  button {
+    background-color: #3fffa3;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.5rem;
+    transition: filter 0.2s;
+    padding: 0.4rem;
+    width: 100px;
+    height: 50px;
+    &:hover {
+      cursor: pointer;
+      filter: brightness(1.13);
+    }
+  }
+  a {
+    color: var(--white);
+    font-weight: bold;
+  }
+}
+.buttonAtualizar {
+  &[disabled] {
+    cursor: not-allowed;
+    svg {
+      animation: animate 2s infinite;
+    }
+  }
+  &:hover {
+    filter: brightness(1.13);
+  }
+}
+@keyframes animate {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
 }
