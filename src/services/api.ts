@@ -5,7 +5,7 @@ import { signOut } from "../contexts/Authcontext";
 import { GetServerSideProps } from "next";
 export function setupAPICliet(ctx: undefined | any) {
   let { "@pimenta.token": tokem } = parseCookies(ctx);
-  console.log(tokem);
+
   const api = axios.create({
     //baseURL: "https://malagueta.herokuapp.com/",
     baseURL: "https://teste-rs.herokuapp.com/",

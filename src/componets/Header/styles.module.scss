@@ -9,13 +9,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  img {
-    cursor: pointer;
-    transition: transform 0.8s;
-    &:hover {
-      transform: scale(1.2);
-    }
-  }
+  // img {
+  //   cursor: pointer;
+  //   transition: transform 0.8s;
+  //   &:hover {
+  //     transform: scale(1.2);
+  //   }
+  // }
 }
 .menuNav {
   display: flex;

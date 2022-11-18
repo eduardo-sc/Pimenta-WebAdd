@@ -6,7 +6,6 @@
   padding: 5px;
 }
 .containerMesas {
-  background-color: aqua;
   border-radius: 0.3rem;
   margin-left: 0.3rem;
   height: 45rem;
@@ -51,6 +50,12 @@
     align-items: center;
     display: flex;
     margin-right: 1rem;
+    &:active {
+      color: #ff3f4b;
+      .tag {
+        background-color: #ff3f4b;
+      }
+    }
   }
 }
 
@@ -64,18 +69,25 @@
 .orderProduc {
   width: 100%;
   margin-bottom: 1rem;
+  span {
+    padding: 2rem;
+  }
 }
 .orderitemProps {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: deeppink;
+
   height: 20px;
   width: 80%;
   margin-bottom: 1rem;
+  span {
+    width: 100%;
+    color: var(--white);
+  }
 }
 .containerItens {
-  background-color: blue;
+  background-color: var(--dark-900);
   height: 45rem;
   width: 73%;
   margin-left: 25px;
@@ -83,34 +95,61 @@
   padding: 10px;
 }
 .itens {
-  background-color: chocolate;
   height: 75%;
 }
 .subTotal {
   display: flex;
-  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 5px;
+  padding: 25px;
   align-items: center;
   justify-content: flex-end;
-  background-color: blueviolet;
+  background-color: var(--dark-700);
   height: 10%;
+  h1 {
+    color: var(--white);
+  }
 }
 .divButton {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  height: 15%;
-  background-color: darkgreen;
+  height: 14%;
+  border-radius: 10px;
+  background-color: var(--dark-700);
   button {
     height: 70%;
     width: 25%;
+    border-radius: 10px;
+    font-weight: bold;
   }
 }
 .cabecalhoItens {
   display: flex;
+  background-color: var(--dark-700);
+  border-radius: 10px;
   align-items: center;
   justify-content: space-between;
-  background-color: deeppink;
-  height: 20px;
-  width: 80%;
+
+  height: 30px;
+  padding-left: 5px;
+  width: 83%;
   margin-bottom: 1rem;
+  span {
+    width: 100%;
+    color: var(--green-900);
+    font-size: 20px;
+    font-weight: bold;
+  }
+}
+.btnpagamento {
+  background-color: var(--green-900);
+
+  border: 0;
+  color: var(--dark-900);
+}
+.btncancelamento {
+  background-color: var(--red-900);
+  border: 0;
+  color: var(--);
 }

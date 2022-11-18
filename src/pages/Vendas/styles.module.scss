@@ -1,0 +1,92 @@
+.container {
+  max-width: 90%;
+  margin: 1rem auto;
+}
+.areaImput {
+  display: flex;
+  flex-direction: row;
+  background-color: var(--dark-900);
+  padding: 40px;
+  border-radius: 15px;
+  justify-content: center;
+  align-items: center;
+
+  height: 50px;
+  input {
+    text-align: center;
+    width: 200px;
+    height: 40px;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 18px;
+    font-weight: 999;
+    color: var(--green-900);
+    outline: none;
+
+    margin-left: 1rem;
+    background: transparent;
+    // color: aqua;
+  }
+
+  input:focus {
+    border: 2px solid #3fffa3;
+  }
+}
+.buttonNovo {
+  height: 40px;
+  padding: 0 25px;
+  border: 0;
+  background-color: var(--green-900);
+  font-weight: bolder;
+  font-size: 1.2rem;
+  border-radius: 0.3rem;
+  margin-left: 1rem;
+  color: var(--dark-700);
+}
+.listOrder {
+  display: flex;
+  flex-direction: column;
+  margin: 0.3rem 0;
+}
+.orderItem {
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+
+  background-color: var(--dark-900);
+
+  margin-bottom: 1px;
+  align-items: center;
+
+  border-radius: 0.3rem;
+
+  span {
+    color: #fff;
+  }
+}
+.tag {
+  height: 60px;
+  width: 6px;
+  background-color: var(--green-900);
+  border-radius: 6px 0 0 6px;
+  margin-right: 1rem;
+}
+.tagNameDate {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  width: 100%;
+  span {
+    color: #fff;
+    font-size: 25px;
+  }
+}
+.tagNameDate1 {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  span {
+    color: #fff;
+    font-size: 25px;
+  }
+}

@@ -1,0 +1,91 @@
+.container {
+  display: flex;
+
+  max-width: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.containerchain {
+  display: flex;
+
+  width: 100%;
+  height: 90%;
+}
+
+.cantainerdespesas {
+  display: flex;
+
+  flex-direction: row;
+  width: 95%;
+  justify-content: space-between;
+  height: 160px;
+  align-items: center;
+  padding: 10px;
+}
+.naoPagas {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #ff3f4b;
+  width: 45%;
+  padding: 10px;
+  border-radius: 10px;
+  span {
+    font-size: 20px;
+  }
+}
+.pagas {
+  display: flex;
+
+  flex-direction: column;
+  height: 100%;
+  background-color: #3fffa3;
+  width: 45%;
+  padding: 10px;
+  border-radius: 10px;
+  span {
+    font-size: 20px;
+  }
+}
+
+.valorImagemPagas {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  padding-left: 2rem;
+  align-items: center;
+  span {
+    margin-left: 1rem;
+    color: #101026;
+    font-size: 35px;
+    font-weight: bolder;
+  }
+}
+.valorImagemNaoPagas {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  padding-left: 2rem;
+  align-items: center;
+  span {
+    margin-left: 1rem;
+    color: #101026;
+    font-size: 35px;
+    font-weight: bolder;
+  }
+}
+.grafico1 {
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  margin: 10px 10px;
+  border-radius: 10px;
+}
+.grafico2 {
+  width: 100%;
+  justify-content: center;
+
+  border-radius: 10px;
+}

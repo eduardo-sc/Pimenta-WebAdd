@@ -50,7 +50,6 @@ export default function Pedidos({ pedido }: BaseProps) {
     await api
       .put<PedidoProps[]>("order/finish", enviarItem)
       .then((response) => {
-        let array = response.data.sort;
         SetLoading(true);
         setPedido([]);
         setPedido(response.data);

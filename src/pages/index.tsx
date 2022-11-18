@@ -3,7 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../../styles/home.module.scss";
 import { Input } from "../componets/ui/Input";
-import logoImagem from "../../public/logo.bmp";
+import logoImagem from "../../public/logo.png";
 import { Button } from "../componets/ui/Button";
 import Link from "next/link";
 import { AuthContext } from "../contexts/Authcontext";
