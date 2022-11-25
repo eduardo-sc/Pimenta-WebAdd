@@ -4,7 +4,7 @@ import { canSSRAuth } from "../../Utils/canSSRAuth";
 import { FiRefreshCcw } from "react-icons/fi";
 import styles from "./styles.module.scss";
 import { setupAPICliet } from "../../services/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../../services/apiClient";
 
 import { toast } from "react-toastify";
@@ -79,6 +79,16 @@ export default function Pedidos({ pedido }: BaseProps) {
         SetLoading(false);
       });
   }
+  useEffect(() => {
+    let time = setTimeout(async () => {
+      await api.get("order/listall").then((response) => {
+        setPedido(response.data);
+      });
+    }, 10000);
+    return () => {
+      clearTimeout(time);
+    };
+  }, [pedidos]);
   return (
     <>
       <Head>

@@ -10,6 +10,7 @@ import { api } from "../../services/apiClient";
 import { canSSRAuth } from "../../Utils/canSSRAuth";
 import styles from "./styles.module.scss";
 import ModalDescriptionProduct from "../../componets/ModalDescriptionProduct";
+import { AxiosError } from "axios";
 
 type ItensProps = {
   id: string;
@@ -25,7 +26,7 @@ type ItensProdProps = {
   price: string;
   description: string;
   banner: string;
-  categry_id: string;
+  category_id: string;
 };
 export default function Products({
   categoryList,
@@ -41,7 +42,7 @@ export default function Products({
   const [produtosPesquisaItens, setProdutosPesquisaItens] = useState<
     ItensProdProps | any
   >(productsItens);
-
+  console.log(productsItens);
   function abrirModal() {
     setItemClicado("");
     setModalVisibleEdit(true);
@@ -69,19 +70,27 @@ export default function Products({
     setProdutosPesquisaItens(data);
   }
   async function deleteIten(id: string) {
-    try {
-      let response = await api.delete("/product/remove", {
+    await api
+      .delete("/product/remove", {
         params: { product_id: id },
-      });
-      let arrayItens = produtosPesquisaItens.filter((item: ItensProdProps) => {
-        return item.id !== id;
-      });
+      })
+      .then(() => {
+        let arrayItens = produtosPesquisaItens.filter(
+          (item: ItensProdProps) => {
+            return item.id !== id;
+          }
+        );
 
-      setProdutosPesquisaItens(arrayItens);
-      toast.success("Excluido com sucesso!");
-    } catch (err) {
-      toast.error("Erro excluir item" + err);
-    }
+        setProdutosPesquisaItens(arrayItens);
+        toast.success("Excluido com sucesso!");
+      })
+      .catch((error: AxiosError) => {
+        if (error.response?.status === 400) {
+          toast.error("Produto com viculo no Pedido ");
+          return;
+        }
+        toast.error("Erro excluir item" + error);
+      });
   }
   function AbrirModalAdicional(item: ItensProdProps) {
     setObjetoAdicional(item);
@@ -106,6 +115,7 @@ export default function Products({
     }
     pesquisaProduto();
   }, [pesquisaText]);
+
   return (
     <>
       <Head>

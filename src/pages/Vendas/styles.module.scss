@@ -1,17 +1,17 @@
 .container {
   max-width: 90%;
-  margin: 1rem auto;
+  margin: 0.5rem auto;
 }
 .areaImput {
   display: flex;
   flex-direction: row;
   background-color: var(--dark-900);
-  padding: 40px;
+  padding: 35px;
   border-radius: 15px;
   justify-content: center;
   align-items: center;
 
-  height: 50px;
+  height: 35px;
   input {
     text-align: center;
     width: 200px;
@@ -75,18 +75,60 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 1rem;
-  width: 100%;
+  width: 95%;
   span {
     color: #fff;
-    font-size: 25px;
+    font-size: 20px;
   }
 }
 .tagNameDate1 {
   display: flex;
-  width: 100%;
+  width: 95%;
   justify-content: flex-end;
   span {
     color: #fff;
+    font-size: 20px;
+  }
+}
+.scroll {
+  display: flex;
+  flex-direction: column;
+
+  height: 500px;
+  overflow-x: scroll;
+  scroll-behavior: initial;
+  padding: 5px;
+  &::-webkit-scrollbar {
+    width: 0px;
+  }
+  margin-top: 0.6rem;
+  scrollbar-width: none;
+}
+.divTotal {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  height: 75px;
+  margin-top: 20px;
+  background-color: var(--dark-900);
+  border-radius: 5px;
+  padding: 20px;
+  button {
+    display: flex;
+    height: 40px;
+    padding: 0 25px;
+    border: 0;
+    background-color: var(--red-900);
+    font-weight: bolder;
+    font-size: 1.2rem;
+    border-radius: 0.3rem;
+    margin-left: rem;
+    color: var(--dark-700);
+    align-items: center;
+  }
+  span {
+    color: var(--green-900);
     font-size: 25px;
   }
 }

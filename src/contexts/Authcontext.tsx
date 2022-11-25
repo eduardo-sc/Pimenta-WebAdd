@@ -78,7 +78,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           },
         };
         await api
-          .get("/detail")
+          .get("/detail", config)
           .then((response) => {
             const { id, name, email } = response.data;
 

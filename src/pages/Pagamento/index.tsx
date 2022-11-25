@@ -6,6 +6,7 @@ import styles from "./styles.module.scss";
 import { setupAPICliet } from "../../services/api";
 import { api } from "../../services/apiClient";
 import { toast } from "react-toastify";
+import { AxiosError } from "axios";
 type PropsPagamentos = {
   id: string;
   table: string;
@@ -52,6 +53,7 @@ export default function Pagamento({ pagamentos }: BaseProps) {
     return total.toFixed(2).replace(".", ",");
   }
   async function pagarMesa() {
+    console.log(pagamentoClicado?.id);
     await api
       .put("/report", { order_id: pagamentoClicado?.id })
       .then((response) => {
@@ -59,11 +61,22 @@ export default function Pagamento({ pagamentos }: BaseProps) {
         setPagamentoClicado(response.data[0]);
         toast.success("Pagamento Finalizado com Sucesso!");
       })
-      .catch((erro) => {
+      .catch((erro: AxiosError) => {
         toast.error("Erro Finalizado Pagamento");
-        console.log(erro);
+        console.log(erro.message);
       });
   }
+  useEffect(() => {
+    let time = setTimeout(async () => {
+      await api.get("report/payment").then((response) => {
+        setListaPagamento(response.data);
+      });
+    }, 10000);
+    return () => {
+      clearTimeout(time);
+    };
+  }, [listaPagamentos]);
+
   return (
     <>
       <Head>

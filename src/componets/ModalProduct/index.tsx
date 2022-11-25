@@ -9,12 +9,16 @@ import { Button } from "../../componets/ui/Button";
 import { toast } from "react-toastify";
 import Modal from "react-modal";
 import { api } from "../../services/apiClient";
-type ItensProps = {
+type ItensProdProps = {
   id: string;
   name: string;
+  price: string;
+  description: string;
+  banner: string;
+  category_id: string;
 };
 interface CategoryListProps {
-  CategoryProps: ItensProps[];
+  CategoryProps: ItensProdProps[];
 }
 export default function ModalProduct({
   category,
@@ -36,9 +40,7 @@ export default function ModalProduct({
       width: "69%",
     },
   };
-  const [itensAtualizado, setItensAtualizado] = useState<ItensProps[]>(
-    [] || data
-  );
+
   const [name, setname] = useState("" || dataItemEdit.name);
   const [price, setPrice] = useState("" || dataItemEdit.price);
   const [description, setdescription] = useState(
@@ -47,18 +49,19 @@ export default function ModalProduct({
 
   const [imageUrl, setImageUrl] = useState(
     dataItemEdit.banner
-      ? `http://20.200.220.100:3333/files/${dataItemEdit.banner}`
+      ? `http://localhost:3333/files/${dataItemEdit.banner}`
       : ""
   );
   const [imgCarregada, setimgCarregada] = useState<File | null>(null);
   const [categories, setCategories] = useState(category || []);
   const [categorySelected, setCategorySelected] = useState(0);
-  const [itensProducts, setItensProducts] = useState(data || []);
+  const [itensProducts, setItensProducts] = useState<ItensProdProps[]>(data);
   const [loading, setLoading] = useState(false);
-  console.log(categories[categorySelected].id);
+
   useEffect(() => {
+    console.log(itensProducts);
     if (dataItemEdit) {
-      let index = category.findIndex((itens: ItensProps) => {
+      let index = category.findIndex((itens: ItensProdProps) => {
         //pegando index da categoria para fixa na tela de edit
         return itens.id === dataItemEdit.category_id;
       });
@@ -109,21 +112,28 @@ export default function ModalProduct({
         data.append("file", imgCarregada);
 
         try {
+          //update
           let response = await api.put("/product/update", data);
-          let respostaAtualizada = itensProducts.filter((item: ItensProps) => {
-            return item.id !== dataItemEdit.id;
-          });
+          let respostaAtualizada = itensProducts.filter(
+            (item: ItensProdProps) => {
+              return item.id !== dataItemEdit.id;
+            }
+          );
           setLoading(true);
+
           let data2 = {
-            id: response.data.id,
-            name: response.data.name,
-            price: response.data.price,
-            description: response.data.description,
-            category_id: categories[categorySelected].id,
-            banner: response.data.banner,
+            id: response.data.id as string,
+            name: response.data.name as string,
+            price: response.data.price as string,
+            description: response.data.description as string,
+            category_id: categories[categorySelected].id as string,
+            banner: response.data.banner as string,
           };
+
           respostaAtualizada.unshift(data2);
           returnData(respostaAtualizada);
+          respostaAtualizada = [];
+          setItensProducts([]);
 
           closeModal();
         } catch (error) {
@@ -134,6 +144,7 @@ export default function ModalProduct({
     }
 
     try {
+      //cadastrar produtos
       if (
         name === "" ||
         price === "" ||
@@ -151,8 +162,9 @@ export default function ModalProduct({
       data.append("category_id", categories[categorySelected].id);
       data.append("file", imgCarregada);
 
-      const api = setupAPICliet("");
+      //get api
       let response = await api.post("/product", data);
+
       let data2 = {
         id: response.data.id,
         name: response.data.name,
@@ -162,9 +174,9 @@ export default function ModalProduct({
         banner: response.data.banner,
       };
 
-      let respostaAtualizada = itensProducts;
-      respostaAtualizada.unshift(respostaAtualizada);
-      returnData(respostaAtualizada);
+      itensProducts.unshift(data2);
+      returnData(itensProducts);
+      console.log("respostaAtualizada", itensProducts);
       toast.success("Gravado com Sucesso!");
     } catch (error) {
       toast.error("Erro ao cadastrar produto");
@@ -177,6 +189,7 @@ export default function ModalProduct({
     setimgCarregada(null);
     fecharModal();
     setLoading(false);
+    setItensProducts([]);
   }
   function fecharModal() {
     setname(" ");
@@ -220,7 +233,7 @@ export default function ModalProduct({
             </label>
             <div className={styles.divEdit}>
               <select value={categorySelected} onChange={pegarCategoryselected}>
-                {categories.map((item: ItensProps, index: any) => {
+                {categories.map((item: ItensProdProps, index: any) => {
                   return (
                     <option key={item.id} value={index}>
                       {item.name}

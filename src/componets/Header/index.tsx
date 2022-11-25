@@ -29,11 +29,12 @@ export function Header() {
             <a>Usuarios</a>
           </Link>
           <Link href={"/Vendas"}>
-            <a>Vendas</a>
+            <a>Relatorio</a>
           </Link>
           <Link href={"/Pagamento"}>
             <a>Caixa</a>
           </Link>
+
           <button onClick={signOut}>
             <FiLogOut fontSize={23} color="#fff" />
           </button>

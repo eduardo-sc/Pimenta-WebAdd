@@ -1,6 +1,7 @@
 .container {
   max-width: 90%;
-
+  margin: 4rem auto;
+  padding: 0 2rem;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
@@ -12,7 +13,7 @@
 
 .form {
   display: flex;
-
+  flex-direction: column;
   margin: 0.3rem;
   max-height: 100%;
   textarea {
@@ -67,8 +68,11 @@
   margin-top: 0.3rem;
 }
 .label {
-  width: 25%;
-  height: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 88%;
+  height: 280px;
   margin: 0 1rem;
   background-color: var(--dark-900);
   margin-bottom: 1rem;

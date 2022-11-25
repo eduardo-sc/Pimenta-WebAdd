@@ -34,6 +34,7 @@ type arry = {
   name: string;
   valor: number;
   data: string;
+  dateInt: number;
 };
 type PropsPagamentos = {
   id: string;
@@ -118,20 +119,40 @@ export default function Dashboard({
       api.get<VendasProps[]>("/repor/sales").then((response) => {
         let teste: arry[] = [];
         response.data.map((element) => {
-          var date = moment(element.created_at, "DD/MM/YYYY")
+          var date = moment(element.created_at, "YYYY-MM-DD")
             .locale("pt-br")
             .format("MMM");
-          var date2 = moment(element.created_at, "DD/MM/YYYY").add(1, "month");
+
+          var date2 = moment(element.created_at, "YYYY-MM-DD").add(1, "month");
           console.log(date2.month());
           let teste1: arry = {
             name: date,
             valor: element.total_sale,
-            data: moment(`05/${date2.month()}/2022`, "DD/MM/YYYY").format(
-              "DD/MM/YYYY"
+            data: moment(`05/${date2.month()}/2022`, "YYYY-MM-DD").format(
+              "YYYY-MM-DD"
             ),
+            dateInt: date2.month(),
           };
           teste.push(teste1);
         });
+
+        //for
+        let mesTest: arry[] = [];
+        let w = teste.reduce((q: arry[], r) => {
+          let dataIntR = r.dateInt;
+          if (dataIntR === r.dateInt) {
+            q.push(r);
+          }
+
+          for (let index = 1; index < teste.length; index++) {
+            let meses1 = 1;
+            if (teste[index].dateInt === meses1) {
+            } else {
+              meses1++;
+            }
+          }
+          return q;
+        }, []);
 
         let data = teste.reduce((q: arry[], c) => {
           let name = c.name;
@@ -145,12 +166,15 @@ export default function Dashboard({
 
           return q;
         }, []);
+        console.log(data);
+
         let teste2 = data.slice(0).sort((a, b) => {
           if (a.data >= b.data) return 1;
           if (a.data <= b.data) return -1;
           return 0;
         });
 
+        console.log(teste2);
         setData(teste2);
       });
     }
@@ -211,7 +235,7 @@ export default function Dashboard({
           <div className={styles.grafico1}>
             <ResponsiveContainer width={"90%"} height={400}>
               <BarChart width={600} height={600} data={data}>
-                <Cell stroke="#3fffa3" />
+                {/* <Cell stroke="#3fffa3" /> */}
                 <XAxis dataKey="name" stroke="#3fffa3" />
                 <Bar dataKey="valor" fill="#3fffa3" label />
               </BarChart>
