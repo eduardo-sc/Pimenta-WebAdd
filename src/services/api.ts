@@ -3,14 +3,15 @@ import { parseCookies } from "nookies";
 import { AuthTokenError } from "./errors/AuthTokenError";
 import { signOut } from "../contexts/Authcontext";
 
-export function setupAPICliet(ctx: undefined | any) {
-  let { "@pimenta.token": tokem } = parseCookies(ctx);
-  console.log(tokem);
+export function setupAPICliet(ctx= undefined) {
+  let cookies= parseCookies(ctx);
+ 
   const api = axios.create({
-    //baseURL: "https://malagueta.herokuapp.com/",
-    baseURL: "http://localhost:3333/",
+    baseURL: "https://teste-rs.herokuapp.com/",
+    //baseURL: "http://DESKTOP-AAVN6MN:3333/",
+    timeout:1000,
     headers: {
-      Authorization: "Bearer " + tokem,
+      Authorization: "Bearer "+cookies['@pimenta.token'],
     },
   });
   api.interceptors.response.use(

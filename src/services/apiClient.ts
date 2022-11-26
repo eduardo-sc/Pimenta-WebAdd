@@ -1,2 +1,2 @@
 import { setupAPICliet } from "./api";
-export const api = setupAPICliet(" ");
+export const api = setupAPICliet();

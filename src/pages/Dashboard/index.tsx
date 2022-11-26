@@ -50,164 +50,107 @@ type PropsPagamentos = {
     }
   ];
 };
+
 interface BaseProps {
   pagamentosNaoPagos: PropsPagamentos[];
   pagamentosPagos: VendasProps[];
 }
-export default function Dashboard({
-  pagamentosNaoPagos,
-  pagamentosPagos,
-}: BaseProps) {
-  const [listaPagamentos, setListaPagamento] = useState<PropsPagamentos[] | []>(
-    pagamentosNaoPagos
-  );
-  const [valorTotalPedido, setValorTotalPedido] = useState("0");
+export default function Dashboard() {
+ 
+  const [valorTotalPedidoNaoPagos, setValorTotalPedidoNaoPagos] = useState("0");
   const [data, setData] = useState<arry[]>();
   const [valorTotalPedidoPagos, setValorTotalPedidoPagos] = useState("0");
-  const mileStatics = [
-    {
-      name: "jan",
-      mileStats: 0,
-    },
-    {
-      name: "fev",
-      mileStats: 5000,
-    },
-    {
-      name: "mar",
-      mileStats: 7000,
-    },
-    {
-      name: "Abr",
-      mileStats: "5780.07",
-    },
-    {
-      name: "maio",
-      mileStats: "1290.50",
-    },
-    {
-      name: "jun",
-      mileStats: "600",
-    },
-    {
-      name: "jul",
-      mileStats: 5490,
-    },
-    {
-      name: "Ago",
-      mileStats: 5490,
-    },
-    {
-      name: "Set",
-      mileStats: 5490,
-    },
-    {
-      name: "Out",
-      mileStats: 5490,
-    },
-    {
-      name: "Nov",
-      mileStats: 5490,
-    },
-    {
-      name: "Dez",
-      mileStats: 5490,
-    },
-  ];
+  
   useEffect(() => {
     async function getPagamentos() {
       api.get<VendasProps[]>("/repor/sales").then((response) => {
-        let teste: arry[] = [];
+        let MesAdd: arry[] = [];
         response.data.map((element) => {
-          var date = moment(element.created_at, "YYYY-MM-DD")
+          var dateNomeMes = moment(element.created_at, "YYYY-MM-DD")
             .locale("pt-br")
             .format("MMM");
 
-          var date2 = moment(element.created_at, "YYYY-MM-DD").add(1, "month");
-          console.log(date2.month());
-          let teste1: arry = {
-            name: date,
+          var dateMesInte = moment(element.created_at, "YYYY-MM-DD").add(1, "month");
+          
+          let objetoMes: arry = {
+            name: dateNomeMes,
             valor: element.total_sale,
-            data: moment(`05/${date2.month()}/2022`, "YYYY-MM-DD").format(
+            data: moment(`05/${dateMesInte.month()}/2022`, "YYYY-MM-DD").format(
               "YYYY-MM-DD"
             ),
-            dateInt: date2.month(),
+            dateInt: dateMesInte.month(),
           };
-          teste.push(teste1);
+          MesAdd.push(objetoMes);
         });
 
         //for
-        let mesTest: arry[] = [];
-        let w = teste.reduce((q: arry[], r) => {
-          let dataIntR = r.dateInt;
-          if (dataIntR === r.dateInt) {
-            q.push(r);
-          }
+        
+      
 
-          for (let index = 1; index < teste.length; index++) {
-            let meses1 = 1;
-            if (teste[index].dateInt === meses1) {
-            } else {
-              meses1++;
-            }
-          }
-          return q;
-        }, []);
+         
 
-        let data = teste.reduce((q: arry[], c) => {
+        let data = MesAdd.reduce((q: arry[], c) => {
           let name = c.name;
 
-          let repedido = q.find((Element) => Element.name === name);
-          if (repedido) {
-            repedido.valor += c.valor;
+          let objetosRepedido = q.find((Element) => Element.name === name);
+          if (objetosRepedido) {
+            objetosRepedido.valor += c.valor;
           } else {
             q.push(c);
           }
 
           return q;
         }, []);
-        console.log(data);
+        
 
-        let teste2 = data.slice(0).sort((a, b) => {
+        let MesSeguencia = data.slice(0).sort((a, b) => {
           if (a.data >= b.data) return 1;
           if (a.data <= b.data) return -1;
           return 0;
         });
 
-        console.log(teste2);
-        setData(teste2);
+        
+        setData(MesSeguencia);
       });
     }
     getPagamentos();
   }, []);
   useEffect(() => {
+    
+    async function pagos() {
+       await api.get<VendasProps[]>("/repor/sales").then((response)=>{
+        console.log(response.data)
+        
     let total = 0;
     let valorItemTotal = 0;
-    if (listaPagamentos) {
-      pagamentosNaoPagos.forEach((pedido) => {
-        pedido.item.forEach((item) => {
-          var valorItem =
-            Number(item.amount) *
-            parseFloat(item.product.price.toString().replace(",", "."));
-          valorItemTotal += valorItem;
-        });
-        total += valorItemTotal;
-      });
-      setValorTotalPedido(total.toFixed(2).replace(".", ","));
-    }
-  }, []);
-  useEffect(() => {
-    let total = 0;
-    if (pagamentosPagos.length) {
-      pagamentosPagos.forEach((pedidos) => {
-        let valoritem =
-          Number(pedidos.amount) *
-          parseFloat(pedidos.price.toString().replace(",", "."));
-        total += valoritem;
-      });
+    if (response.data.length) {
+      let total=  response.data.reduce((q,r) => {
+        return q+r.total_sale
+        
+      },0);
       setValorTotalPedidoPagos(total.toFixed(2).replace(".", ","));
     }
-  });
+
+       });
+      
+    }
+ 
+    
+   pagos();
+  }, []);
+  // useEffect(() => {
+  //   const response = await apiClient.get("report/payment");
+  //   let total = 0;
+  //   if (pagamentosPagos.length) {
+  //     pagamentosPagos.forEach((pedidos) => {
+  //       let valoritem =
+  //         Number(pedidos.amount) *
+  //         parseFloat(pedidos.price.toString().replace(",", "."));
+  //       total += valoritem;
+  //     });
+  //     setValorTotalPedidoPagos(total.toFixed(2).replace(".", ","));
+  //   }
+  // });
   return (
     <>
       <Head>
@@ -217,7 +160,7 @@ export default function Dashboard({
       <div className={styles.container}>
         <div className={styles.cantainerdespesas}>
           <div className={styles.pagas}>
-            <span>Pagamentos do Dia</span>
+            <span>Pagamentos</span>
             <div className={styles.valorImagemPagas}>
               <FiArrowUpCircle size={60} color={"#101026"} />
               <span>{valorTotalPedidoPagos}</span>
@@ -227,23 +170,23 @@ export default function Dashboard({
             <span>Nao Pagos</span>
             <div className={styles.valorImagemPagas}>
               <FiArrowDownCircle size={60} color={"#101026"} />
-              <span>{valorTotalPedido}</span>
+              <span>{valorTotalPedidoNaoPagos}</span>
             </div>
           </div>
         </div>
         <div className={styles.containerchain}>
           <div className={styles.grafico1}>
             <ResponsiveContainer width={"90%"} height={400}>
-              <BarChart width={600} height={600} data={data}>
+              <BarChart width={600} height={600} data={data} margin={{top:50,left:50,right:50,bottom:50}}>
                 {/* <Cell stroke="#3fffa3" /> */}
                 <XAxis dataKey="name" stroke="#3fffa3" />
-                <Bar dataKey="valor" fill="#3fffa3" label />
+                <Bar dataKey="valor" fill="#3fffa3"  style={{}}/>
               </BarChart>
             </ResponsiveContainer>
           </div>
           <div className={styles.grafico2}>
             <ResponsiveContainer width={"90%"} height={400}>
-              <LineChart width={600} height={500} data={data}>
+              <LineChart width={600} height={500} data={data} margin={{top:50,left:50,right:50,bottom:50}}>
                 <XAxis dataKey="name" stroke="#8884d8" />
                 <Line
                   type="monotone"
@@ -261,14 +204,10 @@ export default function Dashboard({
 }
 
 export const getServerSideProps = canSSRAuth(async (ctx) => {
-  const apiClient = setupAPICliet(ctx);
-  const response = await apiClient.get("report/payment");
-  const response2 = await apiClient.get("/repor/sales");
-  console.log(response2.data);
+  
   return {
     props: {
-      pagamentosNaoPagos: response.data,
-      pagamentosPagos: response2.data,
+      
     },
   };
 });

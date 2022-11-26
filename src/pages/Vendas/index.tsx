@@ -36,13 +36,16 @@ export default function Vendas() {
       moment(dateFinal, "DD/MM/YYYY").format("YYYY-MM-DD")
     ) {
       toast.error("Data Inicial Maior que Data Final");
+      setVendasDate([])
       return;
+      
     }
 
     nProgress.start();
     await api
       .get<VendasProps[]>("/repor/sales")
       .then((response) => {
+        setVendasDate([])
         let objeto: VendasProps[] = [];
 
         response.data.map((elementVendas) => {
@@ -150,9 +153,12 @@ export default function Vendas() {
             ))}
         </div>
         <div className={styles.divTotal}>
-          <button
+        
+          
+            <button
             className={styles.buttonNovo}
             onClick={(e) => {
+              
               PagamentosPdf({
                 vendaslistDate: vendasDate,
                 Periodo: {
@@ -169,6 +175,9 @@ export default function Vendas() {
             <FaRegFilePdf color="#fff" size={25} />
             Gerar Pdf
           </button>
+          
+        
+          
           <span>Total R$: {total.toFixed(2).replace(".", ",")}</span>
         </div>
       </div>

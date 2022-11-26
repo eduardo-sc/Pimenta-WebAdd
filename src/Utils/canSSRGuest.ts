@@ -7,13 +7,13 @@ import {
 
 import { parseCookies } from "nookies";
 
-export function canSSRGuest<P>(fn: GetServerSideProps<P>) {
+export function canSSRGuest<P extends { [key: string]: any; }>(fn: GetServerSideProps<P>) {
   return async (
     ctx: GetServerSidePropsContext
   ): Promise<GetServerSidePropsResult<P>> => {
-    const { "@pimenta.token": tokem } = parseCookies(ctx);
+    const cookies = parseCookies(ctx);
     //se tiver cookies sera redirecionado para dela dashboard
-    if (tokem) {
+    if (cookies["@pimenta.token"]) {
       return {
         redirect: {
           destination: "/Dashboard",

@@ -3,6 +3,7 @@ import { destroyCookie, parseCookies, setCookie } from "nookies";
 import Router from "next/router";
 import { api } from "../services/apiClient";
 import { toast } from "react-toastify";
+
 type AuthContextData = {
   user: userProps | any;
   isAuthenticated: boolean;
@@ -44,6 +45,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<userProps>();
   const isAuthenticated = !!user;
   async function signIn({ email, password }: signinProps) {
+    signOut();
     const response = await api
       .post("/session/", {
         email,
@@ -51,16 +53,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
       })
       .then((response) => {
         const { id, name, tokem } = response.data;
-        setCookie(undefined, "@pimenta.token", tokem, {
+        console.log(response.data)
+        setCookie(undefined, "@pimenta.token",tokem  , {
           maxAge: 60 * 60 * 24 * 30,
           part: "/",
         });
-        api.defaults.headers.common["Authorization"] = "Bearer :" + tokem;
+       
         setUser({ id, name, email });
         //passar para proximas requisicao o nosso token
-
+       
+        api.defaults.headers.common["Authorization"] = "Bearer " + tokem;
         Router.push("Dashboard");
-        toast.success("Bem Vindo " + name);
+        
       })
       .catch((error) => {
         toast.error(error.response.data.error);
@@ -69,16 +73,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     async function getDetailUser() {
-      const { "@pimenta.token": tokem } = parseCookies();
-
-      if (tokem) {
-        let config = {
-          headers: {
-            Authorization: "Bearer " + tokem,
-          },
-        };
+      const { "@pimenta.token": token } = parseCookies();
+      console.log(token)
+      if (token) {
         await api
-          .get("/detail", config)
+          .get("/detail")
           .then((response) => {
             const { id, name, email } = response.data;
 
@@ -87,6 +86,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
               name,
               email,
             });
+            
           })
           .catch((erro) => {
             alert(erro);
@@ -96,7 +96,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     getDetailUser();
-  }, []);
+  },[] );
   return (
     <AuthContext.Provider value={{ user, isAuthenticated, signIn, signOut }}>
       {children}
