@@ -15,6 +15,9 @@ export function Header() {
           <Image src={logoImagem} width={200} height={70} />
         </Link>
         <nav className={styles.menuNav}>
+        <Link href={"/"}>
+            <a>Dashboard</a>
+          </Link>
           <Link href={"/Category"}>
             <a>Categoria</a>
           </Link>

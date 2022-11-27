@@ -9,7 +9,7 @@ export function setupAPICliet(ctx= undefined) {
   const api = axios.create({
     baseURL: "https://teste-rs.herokuapp.com/",
     //baseURL: "http://DESKTOP-AAVN6MN:3333/",
-    timeout:1000,
+    
     headers: {
       Authorization: "Bearer "+cookies['@pimenta.token'],
     },

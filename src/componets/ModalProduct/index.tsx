@@ -59,7 +59,7 @@ export default function ModalProduct({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log(itensProducts);
+    
     if (dataItemEdit) {
       let index = category.findIndex((itens: ItensProdProps) => {
         //pegando index da categoria para fixa na tela de edit
@@ -86,7 +86,7 @@ export default function ModalProduct({
   }
   async function registerProduct(event: FormEvent) {
     event.preventDefault();
-
+    
     if (dataItemEdit) {
       let itemExiste = data.filter((item: any) => {
         return item.id === dataItemEdit.id;
@@ -134,69 +134,76 @@ export default function ModalProduct({
           returnData(respostaAtualizada);
           respostaAtualizada = [];
           setItensProducts([]);
-
           closeModal();
+          return
         } catch (error) {
           console.log("erro : " + error);
         }
       }
-      return;
+      
     }
-
-    try {
-      //cadastrar produtos
-      if (
-        name === "" ||
-        price === "" ||
-        description === "" ||
-        imgCarregada === null
-      ) {
-        toast.warning("Campos do Formulario esta vasio");
+    if(!dataItemEdit){
+      try {
+        //cadastrar produtos
+        if (
+          name === "" ||
+          price === "" ||
+          description === "" ||
+          imgCarregada === null
+        ) {
+          toast.warning("Campos do Formulario esta vasio");
+          return;
+        }
+        setLoading(true);
+        const data = new FormData();
+        data.append("name", name);
+        data.append("price", price);
+        data.append("description", description);
+        data.append("category_id", categories[categorySelected].id);
+        data.append("file", imgCarregada);
+  
+        //get api
+        let response = await api.post("/product", data);
+  
+        let data2 = {
+          id: response.data.id,
+          name: response.data.name,
+          price: response.data.price,
+          description: response.data.description,
+          category_id: categories[categorySelected].id,
+          banner: response.data.banner,
+        };
+  
+        itensProducts.unshift(data2);
+        returnData(itensProducts);
+        toast.success("Gravado com Sucesso!");
+        fecharModal();
         return;
+      } catch (error) {
+        toast.error("Erro ao cadastrar produto");
+        console.log(error);
       }
-      setLoading(true);
-      const data = new FormData();
-      data.append("name", name);
-      data.append("price", price);
-      data.append("description", description);
-      data.append("category_id", categories[categorySelected].id);
-      data.append("file", imgCarregada);
 
-      //get api
-      let response = await api.post("/product", data);
-
-      let data2 = {
-        id: response.data.id,
-        name: response.data.name,
-        price: response.data.price,
-        description: response.data.description,
-        category_id: categories[categorySelected].id,
-        banner: response.data.banner,
-      };
-
-      itensProducts.unshift(data2);
-      returnData(itensProducts);
-      console.log("respostaAtualizada", itensProducts);
-      toast.success("Gravado com Sucesso!");
-    } catch (error) {
-      toast.error("Erro ao cadastrar produto");
-      console.log(error);
     }
+
+    
+    // setname("");
+    // setPrice("");
+    // setdescription("");
+    // setImageUrl("");
+    // setimgCarregada(null);
+    // fecharModal();
+    // setLoading(false);
+    // setItensProducts([]);
+  }
+  function fecharModal() {
     setname("");
     setPrice("");
     setdescription("");
     setImageUrl("");
     setimgCarregada(null);
-    fecharModal();
     setLoading(false);
     setItensProducts([]);
-  }
-  function fecharModal() {
-    setname(" ");
-    setPrice("");
-    setdescription("");
-    setImageUrl("");
-    setimgCarregada(null);
 
     closeModal();
   }

@@ -22,6 +22,7 @@ import "moment/locale/pt-br";
 import { api } from "../../services/apiClient";
 import { setupAPICliet } from "../../services/api";
 import moment from "moment";
+import { toast } from "react-toastify";
 type VendasProps = {
   id: string;
   name: string;
@@ -134,23 +135,44 @@ export default function Dashboard() {
        });
       
     }
- 
-    
+ async function naoPagos(){
+   await api.get("report/payment").then((response)=>{
+console.log(response.data)
+   })
+ }
+ naoPagos() ;
    pagos();
   }, []);
-  // useEffect(() => {
-  //   const response = await apiClient.get("report/payment");
-  //   let total = 0;
-  //   if (pagamentosPagos.length) {
-  //     pagamentosPagos.forEach((pedidos) => {
-  //       let valoritem =
-  //         Number(pedidos.amount) *
-  //         parseFloat(pedidos.price.toString().replace(",", "."));
-  //       total += valoritem;
-  //     });
-  //     setValorTotalPedidoPagos(total.toFixed(2).replace(".", ","));
-  //   }
-  // });
+  useEffect(() => {
+   async function getNaoPagas(){
+let totalGeral=0
+
+       await api.get<PropsPagamentos[]>("report/payment").then(response=>{
+       
+        response.data.forEach((pedidos) => {
+          let totalItem = 0
+        pedidos.item.forEach((objeto)=>{
+  
+         totalItem+= objeto.amount * parseFloat(objeto.product.price)
+        
+ },0)
+ totalGeral+=totalItem
+ 
+        });
+        setValorTotalPedidoNaoPagos(totalGeral.toFixed(2).replace('.',','))
+        
+        
+     
+       
+    });
+   }
+      
+   getNaoPagas();
+    
+  
+   
+   },[]);
+
   return (
     <>
       <Head>

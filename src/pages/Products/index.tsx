@@ -42,7 +42,7 @@ export default function Products({
   const [produtosPesquisaItens, setProdutosPesquisaItens] = useState<
     ItensProdProps | any
   >(productsItens);
-  console.log(productsItens);
+  
   function abrirModal() {
     setItemClicado("");
     setModalVisibleEdit(true);
@@ -51,10 +51,12 @@ export default function Products({
     setModalVisibleEdit(false);
   }
   function pegarInformacaoDoProduto(id: string) {
+   
     if (productsItens) {
       let item = productsItens.filter((item: ItensProdProps) => {
         return item.id === id;
       });
+      
 
       setItemClicado(item[0]);
       setModalVisibleEdit(true);
@@ -86,10 +88,10 @@ export default function Products({
       })
       .catch((error: AxiosError) => {
         if (error.response?.status === 400) {
-          toast.error("Produto com viculo no Pedido ");
+          toast.error("Produto não pode ser excluído ");
           return;
         }
-        toast.error("Erro excluir item" + error);
+       
       });
   }
   function AbrirModalAdicional(item: ItensProdProps) {
@@ -115,7 +117,19 @@ export default function Products({
     }
     pesquisaProduto();
   }, [pesquisaText]);
-
+useEffect(()=>{
+ async function get(){
+  
+      await api.get("/product/list").then((responseProducts)=>{
+        
+        setProductsItens(responseProducts.data)
+     }).catch(erro=>{
+      console.log(erro)
+     });
+    
+  }
+  get();
+},[productsItens])
   return (
     <>
       <Head>
