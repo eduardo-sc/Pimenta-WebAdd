@@ -103,7 +103,7 @@ export default function ModalProduct({
         }
 
         const data = new FormData();
-
+        
         data.append("product_id", dataItemEdit.id);
         data.append("name", name);
         data.append("price", price);

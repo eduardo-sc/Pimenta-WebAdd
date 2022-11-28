@@ -56,7 +56,7 @@ export default function ModalDescriptionProduct({
         <span>Nome:</span>
         <div className={styles.containerItem}>
           <span>{item.name}</span>
-          <span className={styles.valor}>R$ {item.price}</span>
+          <span className={styles.valor}>R$ {parseFloat(item.price).toFixed(2).replace('.',',')}</span>
         </div>
         <div className={styles.containerDescricao}>
           <span>Descrição </span>

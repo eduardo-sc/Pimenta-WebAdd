@@ -33,7 +33,7 @@ type AuthProviderProps = {
 export function signOut() {
   try {
     destroyCookie(undefined, "@pimenta.token");
-    api.defaults.headers.common["Authorization"] = " ";
+    api.defaults.headers.common["Authorization"] = "";
     Router.push("/");
   } catch {
     toast.error("Erro ao sair");
@@ -45,7 +45,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<userProps>();
   const isAuthenticated = !!user;
   async function signIn({ email, password }: signinProps) {
-    signOut();
+    
     const response = await api
       .post("/session/", {
         email,
@@ -54,7 +54,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       .then((response) => {
         const { id, name, tokem } = response.data;
         console.log(response.data)
-        setCookie(undefined, "@pimenta.token",tokem  , {
+        setCookie( undefined,"@pimenta.token",tokem  , {
           maxAge: 60 * 60 * 24 * 30,
           part: "/",
         });
@@ -62,7 +62,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setUser({ id, name, email });
         //passar para proximas requisicao o nosso token
        
-        api.defaults.headers.common["Authorization"] = "Bearer " + tokem;
+        api.defaults.headers['Authorization'] = `Bearer ${tokem}`
         Router.push("Dashboard");
         
       })
@@ -74,7 +74,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     async function getDetailUser() {
       const { "@pimenta.token": token } = parseCookies();
-      console.log(token)
+     
       if (token) {
         await api
           .get("/detail")

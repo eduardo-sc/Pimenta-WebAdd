@@ -42,7 +42,7 @@ export default function Pagamento({ pagamentos }: BaseProps) {
       pagamentoClicado?.item.forEach((item) => {
         let valor =
           Number(item.amount) *
-          parseFloat(item.product.price.toString().replace(",", "."));
+          parseFloat(item.product.price);
         total += valor;
         setValorTotalPedido(total.toFixed(2).replace(".", ","));
       });
@@ -146,7 +146,7 @@ export default function Pagamento({ pagamentos }: BaseProps) {
 export const getServerSideProps = canSSRAuth(async (ctx) => {
   const apiClient = setupAPICliet(ctx);
   const response = await apiClient.get("report/payment");
-  console.log(response.data);
+  
   return {
     props: {
       pagamentos: response.data,

@@ -85,7 +85,7 @@ export default function Dashboard() {
         });
 
         
-        console.log('mes response',MesAdd)
+        
       
 
          
@@ -93,11 +93,11 @@ export default function Dashboard() {
         let data = MesAdd.reduce((q: arry[],c,index ) => {
           
           let name = c.name;
-          console.log('objetorepsedido',q)
+          
           let objetosRepedido = q.find((Element) => Element.name === name);
           
           if (objetosRepedido?.name=== name) {
-            console.log(index++)
+            
             objetosRepedido.valor += c.valor;
           } else {
             q.push(c);
@@ -106,14 +106,14 @@ export default function Dashboard() {
           return q;
         }, []);
         
-        console.log('mes juntando',data)
+        
         let MesSeguencia = data.slice(0).sort((a, b) => {
           if (a.data >= b.data) return 1;
           if (a.data <= b.data) return -1;
           return 0;
         });
 
-        console.log('MesSeguencia',MesSeguencia)
+        
         setData(MesSeguencia);
       });
     }
@@ -138,12 +138,7 @@ export default function Dashboard() {
        });
       
     }
- async function naoPagos(){
-   await api.get("report/payment").then((response)=>{
-
-   })
- }
- naoPagos() ;
+ 
    pagos();
   }, []);
   useEffect(() => {
