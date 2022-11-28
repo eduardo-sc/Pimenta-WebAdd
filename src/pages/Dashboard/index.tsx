@@ -84,17 +84,20 @@ export default function Dashboard() {
           MesAdd.push(objetoMes);
         });
 
-        //for
         
+        console.log('mes response',MesAdd)
       
 
          
 
-        let data = MesAdd.reduce((q: arry[], c) => {
+        let data = MesAdd.reduce((q: arry[],c,index ) => {
+          
           let name = c.name;
-
+          console.log('objetorepsedido',q)
           let objetosRepedido = q.find((Element) => Element.name === name);
-          if (objetosRepedido) {
+          
+          if (objetosRepedido?.name=== name) {
+            console.log(index++)
             objetosRepedido.valor += c.valor;
           } else {
             q.push(c);
@@ -103,14 +106,14 @@ export default function Dashboard() {
           return q;
         }, []);
         
-
+        console.log('mes juntando',data)
         let MesSeguencia = data.slice(0).sort((a, b) => {
           if (a.data >= b.data) return 1;
           if (a.data <= b.data) return -1;
           return 0;
         });
 
-        
+        console.log('MesSeguencia',MesSeguencia)
         setData(MesSeguencia);
       });
     }
@@ -120,7 +123,7 @@ export default function Dashboard() {
     
     async function pagos() {
        await api.get<VendasProps[]>("/repor/sales").then((response)=>{
-        console.log(response.data)
+       
         
     let total = 0;
     let valorItemTotal = 0;
@@ -137,7 +140,7 @@ export default function Dashboard() {
     }
  async function naoPagos(){
    await api.get("report/payment").then((response)=>{
-console.log(response.data)
+
    })
  }
  naoPagos() ;

@@ -26,7 +26,7 @@ export function Header() {
             <a>Produtos</a>
           </Link>
           <Link href={"/Pedidos"}>
-            <a>Pedidos</a>
+            <a>Cozinha</a>
           </Link>
           <Link href={"/Usuario"}>
             <a>Usuarios</a>

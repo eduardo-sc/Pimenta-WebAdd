@@ -101,6 +101,7 @@ export default function CadastroUser({
       user_id: dataItemEdit.id,
       name: name,
       permission_id: listPermisson[selectPermissonIndex].id,
+      password
     };
 
     await api
@@ -172,6 +173,7 @@ export default function CadastroUser({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
+            
             )}
 
             <select
@@ -188,9 +190,9 @@ export default function CadastroUser({
                 })}
             </select>
 
-            {dataItemEdit.id ? (
-              <></>
-            ) : (
+           
+              
+            
               <Input
                 placeholder="Digite sua senha"
                 type={"password"}
@@ -198,7 +200,7 @@ export default function CadastroUser({
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-            )}
+            
             {dataItemEdit.id ? (
               <Button onClick={atualizarCadastroUser} loading={loading}>
                 atualizar
