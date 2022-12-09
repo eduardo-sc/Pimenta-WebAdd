@@ -5,22 +5,26 @@ import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { api } from "../../services/apiClient";
 import { canSSRAuth } from "../../Utils/canSSRAuth";
+import nProgress from "nprogress";
 export default function Category() {
   const [name, setName] = useState("");
 
   async function Register(event: FormEvent) {
+    nProgress.start();
     event.preventDefault();
     if (name === "") {
       toast.warning("Preenche compo categoria");
-
+      nProgress.done();
       return;
     }
     try {
       await api.post("/category", { name }).then(() => {
+        nProgress.done();
         toast.success("Salvo com sucesso");
         setName("");
       });
     } catch (error) {
+      nProgress.done();
       toast.error("Nao registrado");
     }
   }

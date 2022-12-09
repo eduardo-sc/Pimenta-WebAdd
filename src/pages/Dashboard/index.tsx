@@ -84,7 +84,7 @@ export default function Dashboard() {
           MesAdd.push(objetoMes);
         });
 
-        
+        console.log(response.data)
         
       
 

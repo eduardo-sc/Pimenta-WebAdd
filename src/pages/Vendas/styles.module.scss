@@ -93,7 +93,8 @@
 .scroll {
   display: flex;
   flex-direction: column;
-
+background-color: #242739;
+border-radius: 5px;
   height: 500px;
   overflow-x: scroll;
   scroll-behavior: initial;
@@ -114,7 +115,19 @@
   background-color: var(--dark-900);
   border-radius: 5px;
   padding: 20px;
-  button {
+  span {
+    color: var(--green-900);
+    font-size: 25px;
+    
+  }
+  
+}
+.divButton{
+   display: flex;
+   width: 80%;
+   flex-direction: row;
+   
+   button {
     display: flex;
     height: 40px;
     padding: 0 25px;
@@ -127,8 +140,6 @@
     color: var(--dark-700);
     align-items: center;
   }
-  span {
-    color: var(--green-900);
-    font-size: 25px;
-  }
+ 
+
 }

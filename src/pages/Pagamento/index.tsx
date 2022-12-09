@@ -7,6 +7,8 @@ import { setupAPICliet } from "../../services/api";
 import { api } from "../../services/apiClient";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
+import { FiRefreshCcw } from "react-icons/fi";
+import nProgress from "nprogress";
 type PropsPagamentos = {
   id: string;
   table: string;
@@ -36,6 +38,7 @@ export default function Pagamento({ pagamentos }: BaseProps) {
   function selectPgamentolist(item: PropsPagamentos) {
     setPagamentoClicado(item);
   }
+  const [loading, SetLoading] = useState(false);
   useEffect(() => {
     let total = 0;
     if (listaPagamentos) {
@@ -53,37 +56,81 @@ export default function Pagamento({ pagamentos }: BaseProps) {
     return total.toFixed(2).replace(".", ",");
   }
   async function pagarMesa() {
-    console.log(pagamentoClicado?.id);
+    nProgress.start();
     await api
       .put("/report", { order_id: pagamentoClicado?.id })
       .then((response) => {
         setListaPagamento(response.data);
         setPagamentoClicado(response.data[0]);
+        nProgress.done();
         toast.success("Pagamento Finalizado com Sucesso!");
       })
       .catch((erro: AxiosError) => {
+        
         toast.error("Erro Finalizado Pagamento");
         console.log(erro.message);
+        nProgress.done();
       });
   }
   useEffect(() => {
     let time = setTimeout(async () => {
-      await api.get("report/payment").then((response) => {
+      nProgress.start();
+      await api.get("/report/payment").then((response) => {
+        nProgress.done();
         setListaPagamento(response.data);
+        nProgress.done();
+      }).catch(erro=>{
+        nProgress.done();
       });
     }, 10000);
     return () => {
       clearTimeout(time);
     };
   }, [listaPagamentos]);
-
+async function cancelarPedido(){
+  nProgress.start();
+  await api.put('/repor/cancel',{ order_id: pagamentoClicado?.id }).then(response=>{
+    console.log(response.data)
+     setListaPagamento(response.data);
+     setPagamentoClicado(response.data[0]);
+     nProgress.done();
+    toast.success("Pagamento cancelado com Sucesso!");
+  }).catch((erro)=>{
+    nProgress.done();
+    toast.error("Erro Pagamento");
+        console.log(erro.message);
+  })
+}
+async function atualizar() {
+  nProgress.start();
+  SetLoading(true);
+   await api.get("/report/payment").then((response) => {
+    setListaPagamento([])
+    setListaPagamento(response.data);
+    SetLoading(false);
+    nProgress.done();
+  }).catch((erro) => {
+      console.log(erro);
+      SetLoading(false);
+      nProgress.done();
+    });
+}
   return (
     <>
       <Head>
         <title>Caixa - Pimenta Malagueta</title>
       </Head>
       <Header />
-
+      <div className={styles.containerHeader}>
+        <h1>Caixa</h1>
+        <button
+          onClick={atualizar}
+          className={styles.buttonAtualizar}
+          disabled={loading}
+        >
+          <FiRefreshCcw size={25} color={"#3fffa3"} />
+        </button>
+      </div>
       <main className={styles.container}>
         <div className={styles.containerMesas}>
           {/* <h1>Mesas</h1> */}
@@ -136,7 +183,7 @@ export default function Pagamento({ pagamentos }: BaseProps) {
             <button className={styles.btnpagamento} onClick={pagarMesa}>
               Finalizar Venda
             </button>
-            <button className={styles.btncancelamento}>Cancelar Venda</button>
+            <button className={styles.btncancelamento} onClick={cancelarPedido}>Cancelar Venda</button>
           </div>
         </div>
       </main>

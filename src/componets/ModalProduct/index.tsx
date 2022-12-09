@@ -187,14 +187,7 @@ export default function ModalProduct({
     }
 
     
-    // setname("");
-    // setPrice("");
-    // setdescription("");
-    // setImageUrl("");
-    // setimgCarregada(null);
-    // fecharModal();
-    // setLoading(false);
-    // setItensProducts([]);
+    
   }
   function fecharModal() {
     setname("");
@@ -234,7 +227,7 @@ export default function ModalProduct({
 
               <input
                 type={"file"}
-                accept={"image/pnd , image/jpeg"}
+                accept={"image/png , image/jpeg"}
                 onChange={carregarImage}
               />
             </label>

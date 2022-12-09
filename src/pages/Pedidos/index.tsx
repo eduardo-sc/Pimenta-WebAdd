@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { api } from "../../services/apiClient";
 
 import { toast } from "react-toastify";
+import nProgress from "nprogress";
 
 export type PedidoProps = {
   id: string;
@@ -41,6 +42,7 @@ export default function Pedidos({ pedido }: BaseProps) {
   }
   async function selectItemEnviar(item: PedidoProps) {
     //fazendo a base do produto ja finalizado
+    nProgress.start();
 
     let enviarItem = {
       order_id: pedidoClicado?.id,
@@ -54,35 +56,48 @@ export default function Pedidos({ pedido }: BaseProps) {
         setPedido([]);
         setPedido(response.data);
         setPedidoClicado(response.data[0]);
-
+        nProgress.done();
         toast.success("Finalizado Com Sucesso!");
         SetLoading(false);
       })
       .catch((erro) => {
+        nProgress.done();
         toast.error("Erro ao Finalizar Item do Pedido!");
         console.log(erro);
         SetLoading(false);
       });
+      nProgress.done();
   }
   async function atualizar() {
     SetLoading(true);
+    nProgress.start();
     await api
       .get("order/listall")
       .then((response) => {
         setPedido([]);
         setPedido(response.data);
         setPedidoClicado(response.data[0]);
+        nProgress.done();
         SetLoading(false);
       })
       .catch((erro) => {
         console.log(erro);
+        nProgress.done();
         SetLoading(false);
       });
   }
   useEffect(() => {
+    
     let time = setTimeout(async () => {
+      nProgress.start();
+      SetLoading(true)
       await api.get("order/listall").then((response) => {
         setPedido(response.data);
+        nProgress.done();
+        SetLoading(false)
+      }).catch(erro=>{
+        nProgress.done();
+        SetLoading(false)
       });
     }, 10000);
     return () => {
@@ -130,7 +145,7 @@ export default function Pedidos({ pedido }: BaseProps) {
                   <span>Produto: {item.product.name}</span>
                   <span>Descrição: {item.product.description}</span>
                   <span> quantidade: {item.amount}</span>
-                  <span>R$: {item.product.price}</span>
+                  <span>R$: {parseFloat(item.product.price).toFixed(2).replace('.',',')}</span>
                   <div className={styles.optionButton}>
                     <button
                       className={""}

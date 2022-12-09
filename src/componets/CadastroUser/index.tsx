@@ -7,6 +7,7 @@ import { Button } from "../ui/Button";
 import { toast } from "react-toastify";
 
 import { api } from "../../services/apiClient";
+import nProgress from "nprogress";
 
 type UserProps = {
   id: string;
@@ -44,6 +45,8 @@ export default function CadastroUser({
   const [selectPermissonIndex, setSelectPermissonIndex] = useState(0);
 
   async function registerUser() {
+    nProgress.start();
+
     if (
       name === "" ||
       email === "" ||
@@ -51,6 +54,8 @@ export default function CadastroUser({
       selectPermissonIndex === null
     ) {
       toast.warning("Preenche os campos");
+      nProgress.done();
+
       return;
     }
     setLoading(true);
@@ -64,28 +69,33 @@ export default function CadastroUser({
       })
 
       .then((res) => {
-        console.log(res.data);
+       
         let dataResponse = {
           id: res.data.id,
           name: res.data.name,
           email: res.data.email,
           permission_id: res.data.permission.id,
         };
-        console.log(dataResponse);
+        
         let respostaAtualizada = dataUser;
         respostaAtualizada.unshift(dataResponse);
         atualizarListaUser(respostaAtualizada);
         setLoading(false);
         close();
+        nProgress.done();
+
         toast.success("Cadastrado com sucesso!");
         setEmail("");
         setName("");
         setPassword("");
         setSelectPermissonIndex(0);
+
       })
       .catch((err) => {
         toast.error(err.response.data.error);
         setLoading(false);
+      nProgress.start();
+
       });
   }
   function pegarPermissionselected(event: any) {

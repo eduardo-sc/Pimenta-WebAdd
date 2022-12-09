@@ -11,6 +11,7 @@ import CadastroUser from "../../componets/CadastroUser";
 import { api } from "../../services/apiClient";
 import ReactModal from "react-modal";
 import ModalDetalheUsuario from "../../componets/ModalDetalheUsuario";
+import nProgress from "nprogress";
 
 type UserProps = {
   id: string;
@@ -50,6 +51,8 @@ export default function Usuario({
     setItemClicado(data);
   }
   function abrirTela() {
+    nProgress.start();
+
     let data = {
       id: "",
       name: "",
@@ -58,12 +61,18 @@ export default function Usuario({
     };
     setItemClicado(data);
     setAbrir(true);
+    nProgress.done();
+
   }
   async function buscarUsuario() {
+    nProgress.start();
+
     setUserList([]);
     const { data } = await api.get("user/list");
     setUserList(data);
     setPesquisaText("");
+    nProgress.done();
+
   }
   async function ExcluirUsuario(id: string) {}
   function alterarCadastro(item: UserProps) {

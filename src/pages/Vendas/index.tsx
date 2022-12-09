@@ -2,14 +2,14 @@ import Head from "next/head";
 import { Header } from "../../componets/Header";
 import PagamentosPdf from "../../componets/PagamentosPdf";
 import "moment/locale/pt-br";
-import { FaRegFilePdf } from "react-icons/fa";
+import { FaRegFilePdf,FaRegFileExcel } from "react-icons/fa";
 import { canSSRAuth } from "../../Utils/canSSRAuth";
 import styles from "./styles.module.scss";
 import { useEffect, useState } from "react";
 import nProgress from "nprogress";
 import Datetime from "react-datetime";
 import moment from "moment";
-import test from "node:test";
+import * as XLSX from 'xlsx'
 import { api } from "../../services/apiClient";
 import { toast } from "react-toastify";
 
@@ -92,6 +92,29 @@ export default function Vendas() {
     }, 0);
     setTotal(totalPro);
   }, [vendasDate]);
+
+  function exportExecel(){
+    nProgress.start();
+
+    let vendas = vendasDate.map(item=>{
+      return {
+        nome:item.name,
+        
+        quantidade:item.amount,
+        preco:parseFloat(item.price).toFixed(2).replace('.',','),
+        total:item.total_sale,
+        data:item.created_at,
+
+      }
+    })
+    console.log(vendas)
+   let wb = XLSX.utils.book_new();
+    let ws = XLSX.utils.json_to_sheet(vendas);
+   XLSX.utils.book_append_sheet(wb,ws,'MySheet1');
+   XLSX.writeFile(wb,'Vendas.xlsx')
+   nProgress.done();
+
+  }
   return (
     <>
       <Head>
@@ -154,10 +177,12 @@ export default function Vendas() {
         </div>
         <div className={styles.divTotal}>
         
-          
-            <button
-            className={styles.buttonNovo}
+          <div className={styles.divButton}>
+
+          <button
+            className={styles.buttonNovo} 
             onClick={(e) => {
+            nProgress.start();
               
               PagamentosPdf({
                 vendaslistDate: vendasDate,
@@ -170,14 +195,21 @@ export default function Vendas() {
                   ),
                 },
               });
+      nProgress.done();
+
             }}
           >
-            <FaRegFilePdf color="#fff" size={25} />
+            <FaRegFilePdf color="#fff" size={16} />
             Gerar Pdf
           </button>
           
         
-          
+          <button className={styles.buttonNovo} onClick={exportExecel}  >
+          <FaRegFileExcel color="#fff" size={16} />
+            Excel
+          </button>
+          </div>
+            
           <span>Total R$: {total.toFixed(2).replace(".", ",")}</span>
         </div>
       </div>
